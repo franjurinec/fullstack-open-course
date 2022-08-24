@@ -16,10 +16,19 @@ const App = () => {
   }
 
   const [selected, setSelected] = useState(pickRandom())
+  const [votes, setVotes] = useState(new Uint8Array(anecdotes.length))
+
+  const incrementVote = (index) => {
+    let votesCopy = [...votes]
+    votesCopy[index]++
+    setVotes(votesCopy)
+  }
 
   return (
     <div>
       {anecdotes[selected]} <br/>
+      has {votes[selected]} votes <br/>
+      <button onClick={() => incrementVote(selected)}>vote</button>
       <button onClick={() => setSelected(pickRandom())}>next anecdote</button>
     </div>
   )
