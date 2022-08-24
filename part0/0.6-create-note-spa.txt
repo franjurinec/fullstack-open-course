@@ -1,0 +1,10 @@
+title Creating a new note - SPA
+
+note left of Browser: User submits new note
+note left of Browser: JavaScript event handler prevents default action
+note left of Browser: JavaScript updates DOM render to include new note 
+note left of Browser: JavaScript posts new note to server
+Browser->Server: HTTP POST "https://studies.cs.helsinki.fi/exampleapp/new_note_spa" w/ Form-Data containing note information
+note right of Server: Stores new note
+Server-->Browser: HTTP 201 - Created
+note left of Browser: No changes (only locally created new notes are visible,\n notes from other users are not re-loaded)

@@ -1,0 +1,12 @@
+title Load page - SPA
+
+Browser->Server: HTTP GET "https://studies.cs.helsinki.fi/exampleapp/spa"
+Server-->Browser: HTML Content
+Browser->Server: HTTP GET "https://studies.cs.helsinki.fi/exampleapp/main.css"
+Server-->Browser: main.css
+Browser->Server: HTTP GET "https://studies.cs.helsinki.fi/exampleapp/spa.js"
+Server-->Browser: spa.js
+note left of Browser: Executes JavaScript which includes fetching note data
+Browser->Server: HTTP GET "https://studies.cs.helsinki.fi/exampleapp/data.json"
+Server-->Browser: application/json - data with all stored notes
+note left of Browser: Event handler updates the DOM with note data
