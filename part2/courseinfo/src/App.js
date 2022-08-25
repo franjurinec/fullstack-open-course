@@ -24,7 +24,7 @@ const Content = (props) => {
 const Total = (props) => {
   return (
     <div>
-      <strong>total of {props.parts.map(part => part.exercises).reduce((a,b) => a+b, 0)} exercises</strong>
+      <strong>total of {props.parts.reduce((a,b) => a+b.exercises, 0)} exercises</strong>
     </div>
   )
 }
