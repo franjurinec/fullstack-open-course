@@ -18,12 +18,16 @@ const App = () => {
     setFilter(event.target.value)
   }
 
+  const handleCountrySelect = (countryName) => {
+    setFilter(countryName)
+  }
+
   const filteredCountries = countries.filter(country => country.name.common.includes(filter))
 
   return (
     <div>
       <SearchInput value={filter} onChange={handleFilterChange}/>
-      <CountryDisplay countries={filteredCountries}/>
+      <CountryDisplay countries={filteredCountries} onSelect={handleCountrySelect}/>
     </div>
   )
 }

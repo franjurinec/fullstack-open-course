@@ -1,6 +1,6 @@
 import React from 'react'
 
-const CountryDisplay = ({countries}) => {
+const CountryDisplay = ({countries, onSelect}) => {
     // More than ten matches display a special message
     if (countries.length > 10)
         return <div>Too many matches, specify another filter</div>
@@ -9,7 +9,11 @@ const CountryDisplay = ({countries}) => {
     if (countries.length >= 2)
         return (
             <div>
-                {countries.map(country => <div key={country.cca3}>{country.name.common}</div>)}
+                {countries.map(country => 
+                    <div key={country.cca3}>
+                        {country.name.common}
+                        <button onClick={() => onSelect(country.name.common)}>show</button>
+                    </div>)}
             </div>
         )
 
