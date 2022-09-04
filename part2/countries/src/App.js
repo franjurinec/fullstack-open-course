@@ -4,9 +4,10 @@ import CountryDisplay from "./CountryDisplay"
 import axios from 'axios'
 
 const App = () => {
-  
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState('')
+
+  const filteredCountries = countries.filter(country => country.name.common.includes(filter))
 
   useEffect(() => {
     axios
@@ -21,8 +22,6 @@ const App = () => {
   const handleCountrySelect = (countryName) => {
     setFilter(countryName)
   }
-
-  const filteredCountries = countries.filter(country => country.name.common.includes(filter))
 
   return (
     <div>
