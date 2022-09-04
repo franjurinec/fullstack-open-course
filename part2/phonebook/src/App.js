@@ -12,12 +12,14 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
-  useEffect(() => {
+  const fetchPersons = () => {
     // Get persons from DB
     personService
-      .getAll()
-      .then(response => setPersons(response.data))
-  }, [])
+    .getAll()
+    .then(response => setPersons(response.data))
+  }
+
+  useEffect(fetchPersons, [])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -55,6 +57,13 @@ const App = () => {
       })
   }
 
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`))
+      personService
+        .deleteById(person.id)
+        .then(fetchPersons)
+  }
+
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   return (
@@ -67,7 +76,7 @@ const App = () => {
         newNumber={newNumber}
         onNumberChange={handleNumberChange}/>
       
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} deletePerson={deletePerson} />
 
     </div>
   )
