@@ -39,6 +39,9 @@ let persons = [
     }
 ]
 
+// For fly.io health check
+app.get('/', (req, res) => res.sendStatus(200))
+
 app.get('/api/persons', (_, res) => res.json(persons))
 
 app.get('/api/persons/:id', (req, res) => {
