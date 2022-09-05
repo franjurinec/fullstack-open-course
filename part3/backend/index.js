@@ -7,7 +7,12 @@ const port = process.env.PORT ?? 3001
 
 app.use(express.json())
 
-app.use(morgan('tiny'))
+// Custom morgan token for request body JSON
+morgan.token('body-json', (req, _) => {
+    return JSON.stringify(req.body)
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body-json'))
 
 let persons = [
     { 
