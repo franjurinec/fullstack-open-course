@@ -51,6 +51,29 @@ app.post('/api/persons', (req, res) => {
         ...req.body
     }
 
+    // Guard clause for missing name
+    if (!newPerson.name) {
+        res.status(400)
+        res.json({error: "name must be defined"})
+        return
+    }
+
+    // Guard clause for missing number
+    if (!newPerson.number) {
+        res.status(400)
+        res.json({error: "number must be defined"})
+        return
+    }
+
+    const matchingPerson = persons.find(person => person.name === newPerson.name)
+    
+    // Guard clause for existing name
+    if (matchingPerson) {
+        res.status(400)
+        res.json({error: "name must be unique"})
+        return
+    }
+
     persons.push(newPerson)
     res.json(newPerson)
 })
