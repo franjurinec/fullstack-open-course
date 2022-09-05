@@ -28,6 +28,19 @@ let persons = [
 
 app.get('/api/persons', (_, res) => res.json(persons))
 
+app.get('/api/persons/:id', (req, res) => {
+    const targetId = Number(req.params.id)
+    const matchingPerson = persons.find(person => person.id === targetId)
+    
+    // Guard clause for no matching id
+    if (!matchingPerson) {
+        res.sendStatus(404)
+        return
+    }
+
+    res.json(matchingPerson)
+})
+
 app.get('/info', (req, res) => {
     res.send(`<p>Phonebook has info for ${persons.length} people</p><p>${new Date().toString()}</p>`)
 })
