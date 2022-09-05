@@ -1,1 +1,1 @@
-Fly.io deployment link: https://fj-fullstack-phonebook.fly.dev/
+Fly.io deployment link: https://fj-phonebook.fly.dev/
