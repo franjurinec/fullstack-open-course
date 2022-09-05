@@ -3,6 +3,8 @@ const app = express()
 
 const port = process.env.PORT ?? 3001
 
+app.use(express.json())
+
 let persons = [
     { 
       "id": 1,
@@ -39,6 +41,18 @@ app.get('/api/persons/:id', (req, res) => {
     }
 
     res.json(matchingPerson)
+})
+
+app.post('/api/persons', (req, res) => {
+    const newId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
+    
+    const newPerson = {
+        id: newId,
+        ...req.body
+    }
+
+    persons.push(newPerson)
+    res.json(newPerson)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
