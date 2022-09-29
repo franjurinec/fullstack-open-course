@@ -69,6 +69,30 @@ app.post('/api/persons', (req, res) => {
         .catch(error => next(error))
 })
 
+// Update person by name
+app.put('/api/persons/:id', (req, res) => {
+    // Guard clause for missing name
+    if (!req.body.name) {
+        res.status(400)
+        res.json({ error: "name must be defined" })
+        return
+    }
+
+    // Guard clause for missing number
+    if (!req.body.number) {
+        res.status(400)
+        res.json({ error: "number must be defined" })
+        return
+    }
+
+    Person.replaceOne({_id: req.params.id}, {
+            name: req.body.name,
+            number: req.body.number
+        })
+        .then(result => res.json(result))
+        .catch(error => next(error))
+})
+
 
 // Delete person by id
 app.delete('/api/persons/:id', (req, res) => {
