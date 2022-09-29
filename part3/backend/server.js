@@ -1,6 +1,9 @@
+require('dotenv').config()
+
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 
 const app = express()
 
@@ -17,86 +20,59 @@ morgan.token('body-json', (req, _) => {
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body-json'))
 
-let persons = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
 
-// For fly.io health check
-app.get('/', (req, res) => res.sendStatus(200))
+// Routes
 
-app.get('/api/persons', (_, res) => res.json(persons))
+app.get('/api/persons', (_, res) => {
+    Person.find({})
+        .then(persons => res.json(persons))
+})
 
 app.get('/api/persons/:id', (req, res) => {
-    const targetId = Number(req.params.id)
-    const matchingPerson = persons.find(person => person.id === targetId)
-    
-    // Guard clause for no matching id
-    if (!matchingPerson) {
-        res.sendStatus(404)
-        return
-    }
+    Person.findById(req.params.id)
+        .then(person => {
 
-    res.json(matchingPerson)
+            if (!person) {
+                res.sendStatus(404)
+                return
+            }
+
+            res.json(person)
+        })
+        .catch((err) => {
+            console.log(err)
+            res.sendStatus(400)
+        })
 })
 
 app.post('/api/persons', (req, res) => {
-    const newId = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)
-    
-    const newPerson = {
-        id: newId,
-        ...req.body
-    }
-
     // Guard clause for missing name
-    if (!newPerson.name) {
+    if (!req.body.name) {
         res.status(400)
-        res.json({error: "name must be defined"})
+        res.json({ error: "name must be defined" })
         return
     }
 
     // Guard clause for missing number
-    if (!newPerson.number) {
+    if (!req.body.number) {
         res.status(400)
-        res.json({error: "number must be defined"})
+        res.json({ error: "number must be defined" })
         return
     }
 
-    const matchingPerson = persons.find(person => person.name === newPerson.name)
-    
-    // Guard clause for existing name
-    if (matchingPerson) {
-        res.status(400)
-        res.json({error: "name must be unique"})
-        return
-    }
+    const newPerson = new Person({
+        name: req.body.name,
+        number: req.body.number
+    })
 
-    persons.push(newPerson)
-    res.json(newPerson)
+    newPerson.save().then(result => res.json(result))
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-    const targetId = Number(req.params.id)
-    persons = persons.filter(person => !(person.id === targetId))
-    res.sendStatus(204)
+    Person.findByIdAndRemove(req.params.id)
+        .then(result => {
+            res.sendStatus(204)
+        })
 })
 
 app.get('/info', (req, res) => {
