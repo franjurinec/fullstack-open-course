@@ -21,31 +21,31 @@ mongoose
   .then(() => {
 
     if (process.argv.length === 3) {
-        // Get all persons
-        Person
-            .find({})
-            .then(persons => {
-                console.log('phonebook:')
-                persons.forEach(person => console.log(`${person.name} ${person.number}`))
-                
-                mongoose.connection.close()
-            })
-        return
+      // Get all persons
+      Person
+        .find({})
+        .then(persons => {
+          console.log('phonebook:')
+          persons.forEach(person => console.log(`${person.name} ${person.number}`))
+
+          mongoose.connection.close()
+        })
+      return
     }
 
     if (process.argv.length === 5) {
-        // Add new person
-        const person = new Person({
-            name: process.argv[3],
-            number: process.argv[4]
-        })
-      
-        person.save()
+      // Add new person
+      const person = new Person({
+        name: process.argv[3],
+        number: process.argv[4]
+      })
 
-        console.log(`added ${person.name} number ${person.number} to phonebook`)
+      person.save()
 
-        mongoose.connection.close()
-        return
+      console.log(`added ${person.name} number ${person.number} to phonebook`)
+
+      mongoose.connection.close()
+      return
     }
 
     console.log('Invalid number of arguments!')

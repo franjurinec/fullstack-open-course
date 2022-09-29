@@ -6,7 +6,7 @@ import Persons from './Persons'
 import personService from './services/persons'
 
 const App = () => {
-  
+
   const [persons, setPersons] = useState([])
 
   const [newName, setNewName] = useState('')
@@ -19,8 +19,8 @@ const App = () => {
   const fetchPersons = () => {
     // Get persons from DB
     personService
-    .getAll()
-    .then(response => setPersons(response.data))
+      .getAll()
+      .then(response => setPersons(response.data))
   }
 
   useEffect(fetchPersons, [])
@@ -85,11 +85,11 @@ const App = () => {
     if (window.confirm(`Delete ${person.name}?`))
       personService
         .deleteById(person.id)
-        .then(_ => {
+        .then(() => {
           setSuccessMessage(`Deleted ${person.name}`)
           setTimeout(() => {setSuccessMessage(null)}, 5000)
         })
-        .catch(error => {
+        .catch(() => {
           setErrorMessage(`Information of ${person.name} has already been removed from the server`)
           setTimeout(() => {setErrorMessage(null)}, 5000)
         })
@@ -104,12 +104,12 @@ const App = () => {
       <Message message={successMessage} type='success' />
       <Message message={errorMessage} type='error' />
       <Filter value={filter} onFilterChange={handleFilterChange} />
-      <PersonForm onSubmit={addPerson} 
-        newName={newName} 
+      <PersonForm onSubmit={addPerson}
+        newName={newName}
         onNameChange={handleNameChange}
         newNumber={newNumber}
         onNumberChange={handleNumberChange}/>
-      
+
       <Persons persons={personsToShow} deletePerson={deletePerson} />
 
     </div>
