@@ -21,17 +21,18 @@ morgan.token('body-json', (req, _) => {
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body-json'))
 
 
-// Routes
-
+// Get all persons
 app.get('/api/persons', (_, res) => {
     Person.find({})
         .then(persons => res.json(persons))
+        .catch(error => next(error))
 })
 
+// Get one person by id
 app.get('/api/persons/:id', (req, res) => {
     Person.findById(req.params.id)
         .then(person => {
-
+            // Guard clause for no matching id
             if (!person) {
                 res.sendStatus(404)
                 return
@@ -39,12 +40,10 @@ app.get('/api/persons/:id', (req, res) => {
 
             res.json(person)
         })
-        .catch((err) => {
-            console.log(err)
-            res.sendStatus(400)
-        })
+        .catch(error => next(error))
 })
 
+// Create new person
 app.post('/api/persons', (req, res) => {
     // Guard clause for missing name
     if (!req.body.name) {
@@ -65,18 +64,32 @@ app.post('/api/persons', (req, res) => {
         number: req.body.number
     })
 
-    newPerson.save().then(result => res.json(result))
+    newPerson.save()
+        .then(result => res.json(result))
+        .catch(error => next(error))
 })
 
+
+// Delete person by id
 app.delete('/api/persons/:id', (req, res) => {
     Person.findByIdAndRemove(req.params.id)
-        .then(result => {
-            res.sendStatus(204)
-        })
+        .then(() => res.sendStatus(204))
+        .catch(error => next(error))
 })
 
+// Get generic info
 app.get('/info', (req, res) => {
-    res.send(`<p>Phonebook has info for ${persons.length} people</p><p>${new Date().toString()}</p>`)
+    Person.countDocuments({})
+        .then(count => res.send(`<p>Phonebook has info for ${count} people</p><p>${new Date().toString()}</p>`))
+        .catch(error => next(error))
 })
+
+// Handle errors
+const errorHandler = (error, req, res, next) => {
+    console.error(error.message)  
+    next(error)
+}
+
+app.use(errorHandler)
 
 app.listen(port, () => console.log(`Server running on port ${port}`))
