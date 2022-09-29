@@ -116,6 +116,10 @@ const errorHandler = (error, req, res, next) => {
         res.status(400).json({error: error.message})
     }
 
+    if (error.name === 'MongoServerError' && error.code === 11000) {
+        res.static(400).json({error: "Duplicate name."})
+    }
+
     next(error)
 }
 
