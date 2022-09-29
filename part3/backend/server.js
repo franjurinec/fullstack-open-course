@@ -22,14 +22,14 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 
 
 // Get all persons
-app.get('/api/persons', (_, res) => {
+app.get('/api/persons', (_, res, next) => {
     Person.find({})
         .then(persons => res.json(persons))
         .catch(error => next(error))
 })
 
 // Get one person by id
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     Person.findById(req.params.id)
         .then(person => {
             // Guard clause for no matching id
@@ -44,7 +44,7 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 // Create new person
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     // Guard clause for missing name
     if (!req.body.name) {
         res.status(400)
@@ -70,7 +70,7 @@ app.post('/api/persons', (req, res) => {
 })
 
 // Update person by name
-app.put('/api/persons/:id', (req, res) => {
+app.put('/api/persons/:id', (req, res, next) => {
     // Guard clause for missing name
     if (!req.body.name) {
         res.status(400)
@@ -85,24 +85,24 @@ app.put('/api/persons/:id', (req, res) => {
         return
     }
 
-    Person.replaceOne({_id: req.params.id}, {
+    Person.findByIdAndUpdate(req.params.id, {
             name: req.body.name,
             number: req.body.number
-        })
+        },{runValidators: true})
         .then(result => res.json(result))
         .catch(error => next(error))
 })
 
 
 // Delete person by id
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
     Person.findByIdAndRemove(req.params.id)
         .then(() => res.sendStatus(204))
         .catch(error => next(error))
 })
 
 // Get generic info
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
     Person.countDocuments({})
         .then(count => res.send(`<p>Phonebook has info for ${count} people</p><p>${new Date().toString()}</p>`))
         .catch(error => next(error))
@@ -110,7 +110,12 @@ app.get('/info', (req, res) => {
 
 // Handle errors
 const errorHandler = (error, req, res, next) => {
-    console.error(error.message)  
+    console.error(error.message)
+
+    if (error.name === 'ValidationError') {
+        res.status(400).json({error: error.message})
+    }
+
     next(error)
 }
 
