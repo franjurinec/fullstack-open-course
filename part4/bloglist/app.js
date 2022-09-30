@@ -6,13 +6,15 @@ const config = require('./utils/config')
 const logger = require('./utils/logger')
 const blogsRouter = require('./controllers/blogs')
 
-mongoose.connect(config.MONGODB_URI)
-  .then(() => {
+const initDB = async () => {
+  try {
+    await mongoose.connect(config.MONGODB_URI)
     logger.info('Connected to MongoDB')
-  })
-  .catch(error => {
+  } catch (error) {
     logger.error('Error connecting to MongoDB:', error.message)
-  })
+  }
+}
+initDB()
 
 app.use(cors())
 app.use(express.json())
