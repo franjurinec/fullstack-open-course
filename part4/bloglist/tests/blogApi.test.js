@@ -2,49 +2,11 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-
-const initialBlogs = [
-  {
-    title: "React patterns",
-    author: "Michael Chan",
-    url: "https://reactpatterns.com/",
-    likes: 7,
-  },
-  {
-    title: "Go To Statement Considered Harmful",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-    likes: 5,
-  },
-  {
-    title: "Canonical string reduction",
-    author: "Edsger W. Dijkstra",
-    url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-    likes: 12,
-  },
-  {
-    title: "First class tests",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-    likes: 10,
-  },
-  {
-    title: "TDD harms architecture",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-    likes: 0,
-  },
-  {
-    title: "Type wars",
-    author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-    likes: 2,
-  }
-]
+const helper = require('./blogTestHelper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  await Blog.insertMany(initialBlogs)
+  await Blog.insertMany(helper.initialBlogs)
 })
 
 describe('for existing blogs', () => {
@@ -58,12 +20,12 @@ describe('for existing blogs', () => {
 
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
-    expect(response.body).toHaveLength(initialBlogs.length)
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
   })
 
   test('returned blogs contain a specific blog', async () => {
     const response = await api.get('/api/blogs')
-    expect(response.body).toContainEqual(expect.objectContaining(initialBlogs[0]))
+    expect(response.body).toContainEqual(expect.objectContaining(helper.initialBlogs[0]))
   })
 
   test('id property is correctly defined', async () => {
@@ -86,9 +48,9 @@ describe('adding a new blog', () => {
       .send(newBlog)
       .expect(201)
 
-    const response = await api.get('/api/blogs')
-    expect(response.body).toHaveLength(initialBlogs.length + 1)
-    expect(response.body).toContainEqual(expect.objectContaining(newBlog))
+    const blogs = await helper.blogsInDB()
+    expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
+    expect(blogs).toContainEqual(expect.objectContaining(newBlog))
   })
 
   test('undefined likes defaults to zero', async () => {
@@ -111,36 +73,35 @@ describe('adding a new blog', () => {
       likes: 8,
     }
     
-    const responseNoAuthor = await api.post('/api/blogs', newBlogMissingData)
-    expect(responseNoAuthor.statusCode).toBe(400)
+    await api.post('/api/blogs')
+      .send(newBlogMissingData)
+      .expect(400)
   })
 
 })
 
 describe('deleting blogs', () => {
   test('specific blog by id', async () => {
-    const blogsResponse = await api.get('/api/blogs')
-    const targetIndex = 0
-    
-    await api.delete(`/api/blogs/${blogsResponse.body[targetIndex].id}`)
+    const target = await helper.getRandomBlog()
+
+    await api.delete(`/api/blogs/${target.id}`)
       .expect(204)
 
-    const newBlogsResponse = await api.get('/api/blogs')
-    expect(newBlogsResponse.body).not.toContainEqual(blogsResponse.body[targetIndex])
+    const stillExists = await helper.existsByID(target.id)
+    expect(stillExists).toBeFalsy()
   })
 })
 
 describe('updating blogs', () => {
   test('specific blog by id', async () => {
-    const blogsResponse = await api.get('/api/blogs')
-    const targetIndex = 0
-    const newLikes = blogsResponse.body[targetIndex].likes + 10
+    const target = await helper.getRandomBlog()
+    const newLikes = target.likes + 10
     
-    await api.put(`/api/blogs/${blogsResponse.body[targetIndex].id}`)
+    await api.put(`/api/blogs/${target.id}`)
       .send({likes: newLikes})
       .expect(200)
 
-    const newBlogsResponse = await api.get('/api/blogs')
-    expect(newBlogsResponse.body[targetIndex].likes).toBe(newLikes)
+    const blog = helper.blogByID(target.id)
+    expect(blog.likes).toBe(newLikes)
   })
 })
