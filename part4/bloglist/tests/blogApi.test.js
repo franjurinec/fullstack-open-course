@@ -101,7 +101,7 @@ describe('updating blogs', () => {
       .send({likes: newLikes})
       .expect(200)
 
-    const blog = helper.blogByID(target.id)
+    const blog = await helper.blogByID(target.id)
     expect(blog.likes).toBe(newLikes)
   })
 })
