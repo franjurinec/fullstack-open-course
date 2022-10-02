@@ -10,25 +10,55 @@ const App = () => {
 
   const [blogs, setBlogs] = useState([])
 
-  const onLoginSubmit = async (username, password) => {
-    const result = await loginService.login(username, password)
-    setUser(result)
+  const onLogin = async (username, password) => {
+    try {
+      const result = await loginService.login(username, password)
+      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(result))
+      setUser(result)
+    } catch (error) {
+      console.error('Login failed!')
+    }
   }
 
-  const fetchBlogs = async () => {
-    const blogs = await blogService.getAll()
-    setBlogs(blogs)
+  const onLogout = async () => {
+    setUser(undefined)
+    window.localStorage.removeItem('loggedBloglistUser')
   }
 
+  // Fetch blogs
   useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const blogs = await blogService.getAll()
+        setBlogs(blogs)
+      } catch (error) {
+        console.error('Failed to fetch blogs!')
+      }
+    }
     fetchBlogs()
   }, [])
+
+  // Load user from localStorage
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }, [])
+  
+  // Update blogService auth token when user changes
+  useEffect(() => {
+    if (user) 
+      blogService.setToken(user.token) 
+  }, [user])
+
 
   if (user === undefined) {
     return (
       <div>
         <h2>Log in to application</h2>
-          <LoginForm {...{onLoginSubmit}} />
+          <LoginForm onLoginSubmit={onLogin} />
       </div>
     )
   }
@@ -40,6 +70,7 @@ const App = () => {
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
+      <button onClick={onLogout}>logout</button>
     </div>
   )
 }
