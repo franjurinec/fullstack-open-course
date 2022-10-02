@@ -25,7 +25,7 @@ const App = () => {
     window.localStorage.removeItem('loggedBloglistUser')
   }
 
-  // Fetch blogs
+  // On load - Fetch blogs
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -38,7 +38,7 @@ const App = () => {
     fetchBlogs()
   }, [])
 
-  // Load user from localStorage
+  // On load - Load user from localStorage
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
@@ -47,7 +47,7 @@ const App = () => {
     }
   }, [])
   
-  // Update blogService auth token when user changes
+  // On user change - Update blogService auth token
   useEffect(() => {
     if (user) 
       blogService.setToken(user.token) 
