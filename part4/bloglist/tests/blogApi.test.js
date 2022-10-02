@@ -2,12 +2,36 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./blogTestHelper')
+const bcrypt = require('bcrypt')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
 })
+
+let token = "";
+beforeAll(async () => {
+  await User.deleteMany({})
+
+  const userData = {
+    username: 'root',
+    password: 'sekret'
+  }
+
+  await api
+    .post('/api/users')
+    .send(userData)
+    .expect(201)
+
+  const result = await api
+    .post('/api/login')
+    .send(userData)
+    .expect(200)
+    
+  token = result.body.token;
+});
 
 describe('for existing blogs', () => {
 
@@ -46,11 +70,25 @@ describe('adding a new blog', () => {
     
     await api.post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
       .expect(201)
 
     const blogs = await helper.blogsInDB()
     expect(blogs).toHaveLength(helper.initialBlogs.length + 1)
     expect(blogs).toContainEqual(expect.objectContaining(newBlog))
+  })
+
+  test('fails with valid data but invalid user token', async () => {
+    const newBlog = {
+      title: 'Example Blog Title',
+      author: 'John Doe',
+      url: 'http://example.com/',
+      likes: 8,
+    }
+    
+    await api.post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
   })
 
   test('undefined likes defaults to zero', async () => {
@@ -62,6 +100,7 @@ describe('adding a new blog', () => {
     
     const response = await api.post('/api/blogs')
       .send(newBlogNoLikes)
+      .set('Authorization', `bearer ${token}`)
       .expect(201)
     
     expect(response.body.likes).toBe(0)
@@ -75,6 +114,7 @@ describe('adding a new blog', () => {
     
     await api.post('/api/blogs')
       .send(newBlogMissingData)
+      .set('Authorization', `bearer ${token}`)
       .expect(400)
   })
 
@@ -82,26 +122,49 @@ describe('adding a new blog', () => {
 
 describe('deleting blogs', () => {
   test('specific blog by id', async () => {
-    const target = await helper.getRandomBlog()
+    const newBlog = {
+      title: 'Example Blog Title',
+      author: 'John Doe',
+      url: 'http://example.com/',
+      likes: 8,
+    }
+    
+    const target = await api.post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
+      .expect(201)
 
-    await api.delete(`/api/blogs/${target.id}`)
+    await api.delete(`/api/blogs/${target.body.id}`)
+      .set('Authorization', `bearer ${token}`)
       .expect(204)
 
-    const stillExists = await helper.existsByID(target.id)
+    const stillExists = await helper.existsByID(target.body.id)
     expect(stillExists).toBeFalsy()
   })
 })
 
 describe('updating blogs', () => {
   test('specific blog by id', async () => {
-    const target = await helper.getRandomBlog()
-    const newLikes = target.likes + 10
+    const newBlog = {
+      title: 'Example Blog Title',
+      author: 'John Doe',
+      url: 'http://example.com/',
+      likes: 8,
+    }
     
-    await api.put(`/api/blogs/${target.id}`)
+    const target = await api.post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
+      .expect(201)
+
+    const newLikes = target.body.likes + 10
+    
+    await api.put(`/api/blogs/${target.body.id}`)
       .send({likes: newLikes})
+      .set('Authorization', `bearer ${token}`)
       .expect(200)
 
-    const blog = await helper.blogByID(target.id)
+    const blog = await helper.blogByID(target.body.id)
     expect(blog.likes).toBe(newLikes)
   })
 })

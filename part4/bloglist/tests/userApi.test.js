@@ -120,4 +120,31 @@ describe('when there is initially one user in db', () => {
     expect(usersAtEnd).toEqual(usersAtStart)
   })
 
+  test('login succeeds for correct user data', async () =>{
+    const loginData = {
+      username: 'root',
+      password: 'sekret'
+    }
+
+    const result = await api
+      .post('/api/login')
+      .send(loginData)
+      .expect(200)
+
+    expect(result.body.username).toBe(loginData.username)
+    expect(result.body.token).toBeDefined()
+  })
+
+  test('login fails for invalid password', async () =>{
+    const loginData = {
+      username: 'root',
+      password: 'notsekret'
+    }
+
+    await api
+      .post('/api/login')
+      .send(loginData)
+      .expect(401)
+  })
+
 })
