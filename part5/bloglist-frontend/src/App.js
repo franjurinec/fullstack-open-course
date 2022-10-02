@@ -6,35 +6,29 @@ import loginService from './services/login'
 
 const App = () => {
 
-  const [usernameInput, setUsernameInput] = useState("")
-  const [passwordInput, setPasswordInput] = useState("")
   const [user, setUser] = useState(undefined)
+
   const [blogs, setBlogs] = useState([])
 
-  const onUsernameInputChange = (event) => setUsernameInput(event.target.value)
-  const onPasswordInputChange = (event) => setPasswordInput(event.target.value)
+  const onLoginSubmit = async (username, password) => {
+    const result = await loginService.login(username, password)
+    setUser(result)
+  }
 
-  const onLoginSubmit = async (event) => {
-    event.preventDefault()
-
-    loginService.login(usernameInput, passwordInput)
-      .then(result => {
-        setUser(result)
-        setUsernameInput("")
-        setPasswordInput("")
-      })
+  const fetchBlogs = async () => {
+    const blogs = await blogService.getAll()
+    setBlogs(blogs)
   }
 
   useEffect(() => {
-    blogService.getAll()
-      .then(blogs => setBlogs( blogs ))  
+    fetchBlogs()
   }, [])
 
   if (user === undefined) {
     return (
       <div>
         <h2>Log in to application</h2>
-          <LoginForm {...{onLoginSubmit, usernameInput, onUsernameInputChange, passwordInput, onPasswordInputChange}} />
+          <LoginForm {...{onLoginSubmit}} />
       </div>
     )
   }
