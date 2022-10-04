@@ -8,7 +8,7 @@ const setToken = newToken => {
 }
 
 const createBlog = async blogData => {
-  const config = { Headers: { Authorization: token } }
+  const config = { headers: { Authorization: token } }
   const response = await axios.post(baseUrl, blogData, config)
   return response.data
 }

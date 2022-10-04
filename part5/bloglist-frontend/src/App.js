@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -23,6 +24,15 @@ const App = () => {
   const onLogout = async () => {
     setUser(undefined)
     window.localStorage.removeItem('loggedBloglistUser')
+  }
+
+  const onBlogCreate = async (title, author, url) => {
+    try {
+      const result = await blogService.createBlog({title, author, url})
+      setBlogs(blogs.concat(result))
+    } catch (error) {
+      console.error('Blog creation failed!')
+    }
   }
 
   // On load - Fetch blogs
@@ -58,7 +68,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-          <LoginForm onLoginSubmit={onLogin} />
+          <LoginForm onSubmit={onLogin} />
       </div>
     )
   }
@@ -67,6 +77,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <p>User {user.name} logged in</p>
+      <BlogForm onSubmit={onBlogCreate} />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}

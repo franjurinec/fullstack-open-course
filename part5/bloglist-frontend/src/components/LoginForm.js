@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const LoginForm = ({ onLoginSubmit }) => {
+const LoginForm = ({ onSubmit }) => {
 
   const [usernameInput, setUsernameInput] = useState("")
   const [passwordInput, setPasswordInput] = useState("")
@@ -8,7 +8,7 @@ const LoginForm = ({ onLoginSubmit }) => {
   return (
     <form onSubmit={async (event) => {
       event.preventDefault()
-      await onLoginSubmit(usernameInput, passwordInput)
+      await onSubmit(usernameInput, passwordInput)
       setUsernameInput('')
       setPasswordInput('')
     }}>
