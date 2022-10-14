@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
@@ -12,6 +12,8 @@ const App = () => {
   const [user, setUser] = useState(undefined)
   const [blogs, setBlogs] = useState([])
   const [messages, setMessages] = useState([])
+
+  const blogFormRef = useRef()
 
   const errorMessage = (message) => {
     setMessages(m => m.concat({message, type: 'error'}))
@@ -42,6 +44,7 @@ const App = () => {
 
   const onBlogCreate = async (title, author, url) => {
     try {
+      blogFormRef.current.toggleVisibility()
       const result = await blogService.createBlog({title, author, url})
       setBlogs(blogs.concat(result))
       successMessage(`A new blog "${title}" by ${author} added!`)
@@ -50,16 +53,30 @@ const App = () => {
     }
   }
 
+  const onBlogLike = async blogData => {
+    try {
+      const blogsCopy = [...blogs]
+      blogsCopy.find(blog => blog.id === blogData.id).likes += 1
+      setBlogs(blogsCopy)
+      // NOTE - While the instructions mentioned sending all data back to the server, sending only a specific field e.g. likes works with the current backend implementation.
+      await blogService.updateBlog(blogData.id, {likes: blogData.likes+1})
+      successMessage(`Liked "${blogData.title}" by ${blogData.author}!`)
+    } catch (error) {
+      errorMessage('Blog like failed!')
+    }
+  }
+
   // On load - Fetch blogs
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const blogs = await blogService.getAll()
-        setBlogs(blogs)
+        const newBlogs = await blogService.getAll()
+        setBlogs(newBlogs)
       } catch (error) {
         errorMessage('Failed to fetch blogs!')
       }
     }
+
     fetchBlogs()
   }, [])
 
@@ -92,13 +109,13 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {messages.map(({message, type}) => <Message key={message} message={message} type={type} />)}
+      {messages.map(({message, type}, idx) => <Message key={idx} message={message} type={type} />)}
       <p>User {user.name} logged in <button onClick={onLogout}>logout</button></p>
-      <Togglable buttonLabel="new blog">
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm onSubmit={onBlogCreate} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} onLike={onBlogLike} />
       )}
     </div>
   )
