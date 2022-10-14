@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import Message from './components/Message'
+import Togglable from './components/Toggleable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -93,7 +94,9 @@ const App = () => {
       <h2>blogs</h2>
       {messages.map(({message, type}) => <Message key={message} message={message} type={type} />)}
       <p>User {user.name} logged in <button onClick={onLogout}>logout</button></p>
-      <BlogForm onSubmit={onBlogCreate} />
+      <Togglable buttonLabel="new blog">
+        <BlogForm onSubmit={onBlogCreate} />
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
