@@ -18,12 +18,12 @@ const App = () => {
   const sortedBlogs = useMemo(() => [...blogs].sort((b1, b2) => b2.likes - b1.likes), [blogs])
 
   const errorMessage = (message) => {
-    setMessages(m => m.concat({message, type: 'error'}))
+    setMessages(m => m.concat({ message, type: 'error' }))
     setTimeout(() => setMessages(m => m.slice(1)), 5000)
   }
 
   const successMessage = (message) => {
-    setMessages(m => m.concat({message, type: 'success'}))
+    setMessages(m => m.concat({ message, type: 'success' }))
     setTimeout(() => setMessages(m => m.slice(1)), 5000)
   }
 
@@ -41,13 +41,13 @@ const App = () => {
   const onLogout = async () => {
     setUser(undefined)
     window.localStorage.removeItem('loggedBloglistUser')
-    successMessage(`Logged out!`)
+    successMessage('Logged out!')
   }
 
   const onBlogCreate = async (title, author, url) => {
     try {
       blogFormRef.current.toggleVisibility()
-      const result = await blogService.createBlog({title, author, url})
+      const result = await blogService.createBlog({ title, author, url })
       setBlogs(blogs.concat(result))
       successMessage(`A new blog "${title}" by ${author} added!`)
     } catch (error) {
@@ -61,7 +61,7 @@ const App = () => {
       blogsCopy.find(blog => blog.id === blogData.id).likes += 1
       setBlogs(blogsCopy)
       // NOTE - While the instructions mentioned sending all data back to the server, sending only a specific field e.g. likes works with the current backend implementation.
-      await blogService.updateBlog(blogData.id, {likes: blogData.likes+1})
+      await blogService.updateBlog(blogData.id, { likes: blogData.likes + 1 })
       successMessage(`Liked "${blogData.title}" by ${blogData.author}!`)
     } catch (error) {
       errorMessage('Blog like failed!')
@@ -72,7 +72,7 @@ const App = () => {
     try {
       setBlogs(blogs => blogs.filter(blog => blog.id !== id))
       await blogService.deleteBlog(id)
-      successMessage(`Blog removed successfully!`)
+      successMessage('Blog removed successfully!')
     } catch (error) {
       errorMessage('Failed to remove blog!')
     }
@@ -100,11 +100,11 @@ const App = () => {
       setUser(user)
     }
   }, [])
-  
+
   // On user change - Update blogService auth token
   useEffect(() => {
-    if (user) 
-      blogService.setToken(user.token) 
+    if (user)
+      blogService.setToken(user.token)
   }, [user])
 
 
@@ -112,7 +112,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        {messages.map(({message, type}) => <Message key={message} message={message} type={type} />)}
+        {messages.map(({ message, type }) => <Message key={message} message={message} type={type} />)}
         <LoginForm onSubmit={onLogin} />
       </div>
     )
@@ -121,7 +121,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {messages.map(({message, type}, idx) => <Message key={idx} message={message} type={type} />)}
+      {messages.map(({ message, type }, idx) => <Message key={idx} message={message} type={type} />)}
       <p>User {user.name} logged in <button onClick={onLogout}>logout</button></p>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm onSubmit={onBlogCreate} />

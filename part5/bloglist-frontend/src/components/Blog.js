@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 
-const Blog = ({blog, onLike, onDelete}) => {
+const Blog = ({ blog, onLike, onDelete }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -16,7 +17,7 @@ const Blog = ({blog, onLike, onDelete}) => {
   if (!expanded) return (
     <div style={blogStyle}>
       {blog.title} {blog.author} <button onClick={toggleExpanded}>show</button>
-    </div> 
+    </div>
   )
 
   return (
@@ -26,8 +27,21 @@ const Blog = ({blog, onLike, onDelete}) => {
       <div>{`likes ${blog.likes}`} <button onClick={() => onLike(blog)}>like</button></div>
       <div>{blog.user.name}</div>
       <div><button onClick={() => onDelete(blog.id)}>remove</button></div>
-    </div>  
+    </div>
   )
+}
+
+Blog.propTypes = {
+  onLike: PropTypes.func,
+  onDelete: PropTypes.func,
+  blog: {
+    id: PropTypes.string,
+    title: PropTypes.string,
+    author: PropTypes.string,
+    url: PropTypes.string,
+    likes: PropTypes.number,
+    user: { name: PropTypes.string }
+  }
 }
 
 export default Blog
