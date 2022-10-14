@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
@@ -14,6 +14,8 @@ const App = () => {
   const [messages, setMessages] = useState([])
 
   const blogFormRef = useRef()
+
+  const sortedBlogs = useMemo(() => [...blogs].sort((b1, b2) => b2.likes - b1.likes), [blogs])
 
   const errorMessage = (message) => {
     setMessages(m => m.concat({message, type: 'error'}))
@@ -114,7 +116,7 @@ const App = () => {
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm onSubmit={onBlogCreate} />
       </Togglable>
-      {blogs.map(blog =>
+      {sortedBlogs.map(blog =>
         <Blog key={blog.id} blog={blog} onLike={onBlogLike} />
       )}
     </div>
