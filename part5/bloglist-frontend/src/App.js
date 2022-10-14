@@ -68,6 +68,16 @@ const App = () => {
     }
   }
 
+  const onBlogDelete = async id => {
+    try {
+      setBlogs(blogs => blogs.filter(blog => blog.id !== id))
+      await blogService.deleteBlog(id)
+      successMessage(`Blog removed successfully!`)
+    } catch (error) {
+      errorMessage('Failed to remove blog!')
+    }
+  }
+
   // On load - Fetch blogs
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -117,7 +127,7 @@ const App = () => {
         <BlogForm onSubmit={onBlogCreate} />
       </Togglable>
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} onLike={onBlogLike} />
+        <Blog key={blog.id} blog={blog} onLike={onBlogLike} onDelete={onBlogDelete} />
       )}
     </div>
   )
