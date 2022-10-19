@@ -34,14 +34,14 @@ const Blog = ({ blog, onLike, onDelete }) => {
 Blog.propTypes = {
   onLike: PropTypes.func,
   onDelete: PropTypes.func,
-  blog: {
+  blog: PropTypes.shape({
     id: PropTypes.string,
     title: PropTypes.string,
     author: PropTypes.string,
     url: PropTypes.string,
     likes: PropTypes.number,
-    user: { name: PropTypes.string }
-  }
+    user: PropTypes.shape({ name: PropTypes.string })
+  })
 }
 
 export default Blog

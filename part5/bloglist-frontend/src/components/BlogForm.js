@@ -21,18 +21,21 @@ const BlogForm = ({ onSubmit }) => {
           title:
           <input
             value={titleInput}
+            placeholder="Enter Title"
             onChange={({ target }) => setTitleInput(target.value)} />
         </div>
         <div>
           author:
           <input
             value={authorInput}
+            placeholder="John Doe"
             onChange={({ target }) => setAuthorInput(target.value)} />
         </div>
         <div>
           url:
           <input
             value={urlInput}
+            placeholder="http://example.url.com"
             onChange={({ target }) => setUrlInput(target.value)} />
         </div>
         <button type="submit">create</button>
