@@ -56,7 +56,7 @@ describe('Blog app', function() {
     const blogHeader = blog => `${blog.title} ${blog.author}`
 
     const createBlog = blog => {
-      cy.contains('new blog').click()
+      cy.contains('button', 'new blog').click()
       cy.get('#title').type(blog.title)
       cy.get('#author').type(blog.author)
       cy.get('#url').type(blog.url)
