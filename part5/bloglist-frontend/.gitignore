@@ -8,6 +8,7 @@
 # testing
 /coverage
 videos
+screenshots
 
 # production
 /build

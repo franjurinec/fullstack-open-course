@@ -11,8 +11,7 @@ const Message = ({ message, type }) => {
     borderStyle: 'solid',
     borderRadius: 4,
     padding: 2,
-    margin: 4,
-    display: 'inline-block'
+    margin: 4
   }
 
   if (type === 'success')

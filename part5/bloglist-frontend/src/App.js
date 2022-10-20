@@ -70,8 +70,8 @@ const App = () => {
 
   const onBlogDelete = async id => {
     try {
-      setBlogs(blogs => blogs.filter(blog => blog.id !== id))
       await blogService.deleteBlog(id)
+      setBlogs(blogs => blogs.filter(blog => blog.id !== id))
       successMessage('Blog removed successfully!')
     } catch (error) {
       errorMessage('Failed to remove blog!')

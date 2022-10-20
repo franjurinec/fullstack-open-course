@@ -15,13 +15,13 @@ const Blog = ({ blog, onLike, onDelete }) => {
   const toggleExpanded = () => setExpanded(e => !e)
 
   if (!expanded) return (
-    <div style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       {blog.title} {blog.author} <button onClick={toggleExpanded}>show</button>
     </div>
   )
 
   return (
-    <div style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       <div>{blog.title} {blog.author} <button onClick={toggleExpanded}>hide</button></div>
       <div>{blog.url}</div>
       <div>{`likes ${blog.likes}`} <button onClick={() => onLike(blog)}>like</button></div>
