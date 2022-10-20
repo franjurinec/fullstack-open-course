@@ -11,7 +11,7 @@ describe('Blog app', function() {
     cy.request('POST', 'http://localhost:3003/api/users/', user)
     cy.visit('http://localhost:3000')
   })
-  
+
   it('Login form is shown', function() {
     cy.contains('Log in to application')
     cy.contains('username')
@@ -64,7 +64,7 @@ describe('Blog app', function() {
     }
 
     it('A blog can be created', function() {
-      createBlog(blogExample)      
+      createBlog(blogExample)
       cy.contains(blogHeader(blogExample))
     })
 
@@ -88,7 +88,7 @@ describe('Blog app', function() {
       createBlog(blogExample)
 
       const header = blogHeader(blogExample)
-      
+
       const user = {
         name: 'Other Test User',
         username: 'user',
@@ -105,7 +105,7 @@ describe('Blog app', function() {
     it('Blogs are sorted by like count', function() {
       createBlog(blogExample)
       const header1 = blogHeader(blogExample)
-      
+
       createBlog(blogExample2)
       const header2 = blogHeader(blogExample2)
 
@@ -122,7 +122,7 @@ describe('Blog app', function() {
       cy.contains(header2).parent().contains('button', 'like').click()
       cy.contains(header2).parent().contains('likes 2')
 
-      
+
       cy.get('.blog').eq(0).contains(header2)
       cy.get('.blog').eq(1).contains(header1)
     })
