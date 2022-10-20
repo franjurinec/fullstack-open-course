@@ -17,7 +17,10 @@
     "eject": "react-scripts eject",
     "eslint": "eslint .",
     "quick-test": "CI=true npm test -- --verbose",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "cypress run"
+
   },
   "eslintConfig": {
     "extends": [
