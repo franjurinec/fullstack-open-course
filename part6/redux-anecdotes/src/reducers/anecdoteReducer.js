@@ -29,7 +29,7 @@ const anecdoteSlice = createSlice({
       state.find(anecdote => anecdote.id === action.payload).votes++
     },
     createAnecdote(state, action) {
-      state.push(action.payload)
+      state.push(asObject(action.payload))
     }
   }
 })
