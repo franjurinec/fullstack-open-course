@@ -11,30 +11,23 @@ beforeEach(async () => {
   await Blog.insertMany(helper.initialBlogs)
 })
 
-let token = "";
+let token = ''
 beforeAll(async () => {
   await User.deleteMany({})
 
   const userData = {
     username: 'root',
-    password: 'sekret'
+    password: 'sekret',
   }
 
-  await api
-    .post('/api/users')
-    .send(userData)
-    .expect(201)
+  await api.post('/api/users').send(userData).expect(201)
 
-  const result = await api
-    .post('/api/login')
-    .send(userData)
-    .expect(200)
-    
-  token = result.body.token;
-});
+  const result = await api.post('/api/login').send(userData).expect(200)
+
+  token = result.body.token
+})
 
 describe('for existing blogs', () => {
-
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
@@ -49,14 +42,15 @@ describe('for existing blogs', () => {
 
   test('returned blogs contain a specific blog', async () => {
     const response = await api.get('/api/blogs')
-    expect(response.body).toContainEqual(expect.objectContaining(helper.initialBlogs[0]))
+    expect(response.body).toContainEqual(
+      expect.objectContaining(helper.initialBlogs[0])
+    )
   })
 
   test('id property is correctly defined', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body[0].id).toBeDefined()
   })
-
 })
 
 describe('adding a new blog', () => {
@@ -67,8 +61,9 @@ describe('adding a new blog', () => {
       url: 'http://example.com/',
       likes: 8,
     }
-    
-    await api.post('/api/blogs')
+
+    await api
+      .post('/api/blogs')
       .send(newBlog)
       .set('Authorization', `bearer ${token}`)
       .expect(201)
@@ -85,10 +80,8 @@ describe('adding a new blog', () => {
       url: 'http://example.com/',
       likes: 8,
     }
-    
-    await api.post('/api/blogs')
-      .send(newBlog)
-      .expect(401)
+
+    await api.post('/api/blogs').send(newBlog).expect(401)
   })
 
   test('undefined likes defaults to zero', async () => {
@@ -97,12 +90,13 @@ describe('adding a new blog', () => {
       author: 'John Doe',
       url: 'http://example.com/',
     }
-    
-    const response = await api.post('/api/blogs')
+
+    const response = await api
+      .post('/api/blogs')
       .send(newBlogNoLikes)
       .set('Authorization', `bearer ${token}`)
       .expect(201)
-    
+
     expect(response.body.likes).toBe(0)
   })
 
@@ -111,13 +105,13 @@ describe('adding a new blog', () => {
       author: 'John Doe',
       likes: 8,
     }
-    
-    await api.post('/api/blogs')
+
+    await api
+      .post('/api/blogs')
       .send(newBlogMissingData)
       .set('Authorization', `bearer ${token}`)
       .expect(400)
   })
-
 })
 
 describe('deleting blogs', () => {
@@ -128,13 +122,15 @@ describe('deleting blogs', () => {
       url: 'http://example.com/',
       likes: 8,
     }
-    
-    const target = await api.post('/api/blogs')
+
+    const target = await api
+      .post('/api/blogs')
       .send(newBlog)
       .set('Authorization', `bearer ${token}`)
       .expect(201)
 
-    await api.delete(`/api/blogs/${target.body.id}`)
+    await api
+      .delete(`/api/blogs/${target.body.id}`)
       .set('Authorization', `bearer ${token}`)
       .expect(204)
 
@@ -151,16 +147,18 @@ describe('updating blogs', () => {
       url: 'http://example.com/',
       likes: 8,
     }
-    
-    const target = await api.post('/api/blogs')
+
+    const target = await api
+      .post('/api/blogs')
       .send(newBlog)
       .set('Authorization', `bearer ${token}`)
       .expect(201)
 
     const newLikes = target.body.likes + 10
-    
-    await api.put(`/api/blogs/${target.body.id}`)
-      .send({likes: newLikes})
+
+    await api
+      .put(`/api/blogs/${target.body.id}`)
+      .send({ likes: newLikes })
       .set('Authorization', `bearer ${token}`)
       .expect(200)
 

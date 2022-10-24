@@ -7,22 +7,24 @@ usersRouter.post('/', async (req, res) => {
 
   if (!(username && password)) {
     return res.status(400).json({
-      error: 'missing information'
+      error: 'missing information',
     })
   }
 
-  if (username.length < 3) return res.status(400).json({ 
-    error: 'username must be at least 3 characters long' 
-  })
+  if (username.length < 3)
+    return res.status(400).json({
+      error: 'username must be at least 3 characters long',
+    })
 
-  if (password.length < 3) return res.status(400).json({ 
-    error: 'password must be at least 3 characters long' 
-  })
+  if (password.length < 3)
+    return res.status(400).json({
+      error: 'password must be at least 3 characters long',
+    })
 
   const existingUser = await User.findOne({ username })
   if (existingUser) {
     return res.status(400).json({
-      error: 'username must be unique'
+      error: 'username must be unique',
     })
   }
 

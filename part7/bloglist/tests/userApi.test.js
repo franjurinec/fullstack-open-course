@@ -33,7 +33,7 @@ describe('when there is initially one user in db', () => {
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
-    const usernames = usersAtEnd.map(u => u.username)
+    const usernames = usersAtEnd.map((u) => u.username)
     expect(usernames).toContain(newUser.username)
   })
 
@@ -93,7 +93,9 @@ describe('when there is initially one user in db', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
-    expect(result.body.error).toContain('username must be at least 3 characters long')
+    expect(result.body.error).toContain(
+      'username must be at least 3 characters long'
+    )
 
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toEqual(usersAtStart)
@@ -114,37 +116,32 @@ describe('when there is initially one user in db', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
-    expect(result.body.error).toContain('password must be at least 3 characters long')
+    expect(result.body.error).toContain(
+      'password must be at least 3 characters long'
+    )
 
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toEqual(usersAtStart)
   })
 
-  test('login succeeds for correct user data', async () =>{
+  test('login succeeds for correct user data', async () => {
     const loginData = {
       username: 'root',
-      password: 'sekret'
+      password: 'sekret',
     }
 
-    const result = await api
-      .post('/api/login')
-      .send(loginData)
-      .expect(200)
+    const result = await api.post('/api/login').send(loginData).expect(200)
 
     expect(result.body.username).toBe(loginData.username)
     expect(result.body.token).toBeDefined()
   })
 
-  test('login fails for invalid password', async () =>{
+  test('login fails for invalid password', async () => {
     const loginData = {
       username: 'root',
-      password: 'notsekret'
+      password: 'notsekret',
     }
 
-    await api
-      .post('/api/login')
-      .send(loginData)
-      .expect(401)
+    await api.post('/api/login').send(loginData).expect(401)
   })
-
 })
