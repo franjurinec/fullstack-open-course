@@ -8,7 +8,7 @@ describe('<BlogForm />', () => {
     const testData = {
       title: 'Test Title',
       author: 'Some User',
-      url: 'https://blog.test.com',
+      url: 'https://blog.test.com'
     }
 
     const submitHandler = jest.fn()
@@ -27,8 +27,8 @@ describe('<BlogForm />', () => {
     await user.click(submitButton)
 
     expect(submitHandler.mock.calls).toHaveLength(1)
-    expect(submitHandler.mock.calls[0][0]).toBe(testData.title)
-    expect(submitHandler.mock.calls[0][1]).toBe(testData.author)
-    expect(submitHandler.mock.calls[0][2]).toBe(testData.url)
+    expect(submitHandler.mock.calls[0][0].title).toBe(testData.title)
+    expect(submitHandler.mock.calls[0][0].author).toBe(testData.author)
+    expect(submitHandler.mock.calls[0][0].url).toBe(testData.url)
   })
 })

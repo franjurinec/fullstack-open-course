@@ -15,7 +15,7 @@ const Notification = () => {
     borderStyle: 'solid',
     borderRadius: 4,
     padding: 2,
-    margin: 4,
+    margin: 4
   }
 
   return <div style={notificationStyle}>{notification.message}</div>
@@ -23,7 +23,7 @@ const Notification = () => {
 
 Notification.propTypes = {
   message: PropTypes.string,
-  type: PropTypes.string,
+  type: PropTypes.string
 }
 
 export default Notification

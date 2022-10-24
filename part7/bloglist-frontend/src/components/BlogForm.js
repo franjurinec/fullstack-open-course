@@ -12,7 +12,11 @@ const BlogForm = ({ onSubmit }) => {
       <form
         onSubmit={async (event) => {
           event.preventDefault()
-          await onSubmit(titleInput, authorInput, urlInput)
+          await onSubmit({
+            title: titleInput,
+            author: authorInput,
+            url: urlInput
+          })
           setTitleInput('')
           setAuthorInput('')
           setUrlInput('')
@@ -54,7 +58,7 @@ const BlogForm = ({ onSubmit }) => {
 }
 
 BlogForm.propTypes = {
-  onSubmit: PropTypes.func,
+  onSubmit: PropTypes.func
 }
 
 export default BlogForm
