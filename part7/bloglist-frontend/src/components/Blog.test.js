@@ -4,22 +4,27 @@ import '@testing-library/jest-dom/extend-expect'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
-
   const blog = {
     title: 'Test Blog Title',
     author: 'Mr. Test',
     url: 'someUrl.com',
     likes: 5,
-    user: { name: 'Jest' }
+    user: { name: 'Jest' },
   }
 
   test('Renders only title and author by default', () => {
     render(<Blog blog={blog} />)
 
     expect(screen.queryByText(blog.title, { exact: false })).toBeInTheDocument()
-    expect(screen.queryByText(blog.author, { exact: false })).toBeInTheDocument()
-    expect(screen.queryByText(blog.url, { exact: false })).not.toBeInTheDocument()
-    expect(screen.queryByText(blog.likes, { exact: false })).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(blog.author, { exact: false })
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(blog.url, { exact: false })
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByText(blog.likes, { exact: false })
+    ).not.toBeInTheDocument()
   })
 
   test('Expanded blog shows url and likes', async () => {
@@ -30,7 +35,9 @@ describe('<Blog />', () => {
     await user.click(button)
 
     expect(screen.queryByText(blog.title, { exact: false })).toBeInTheDocument()
-    expect(screen.queryByText(blog.author, { exact: false })).toBeInTheDocument()
+    expect(
+      screen.queryByText(blog.author, { exact: false })
+    ).toBeInTheDocument()
     expect(screen.queryByText(blog.url, { exact: false })).toBeInTheDocument()
     expect(screen.queryByText(blog.likes, { exact: false })).toBeInTheDocument()
   })
@@ -50,6 +57,4 @@ describe('<Blog />', () => {
 
     expect(likeHandler.mock.calls).toHaveLength(2)
   })
-
 })
-

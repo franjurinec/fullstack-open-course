@@ -8,17 +8,19 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
-
   const [user, setUser] = useState(undefined)
   const [blogs, setBlogs] = useState([])
   const [notification, setNotification] = useState([])
 
   const blogFormRef = useRef()
 
-  const sortedBlogs = useMemo(() => [...blogs].sort((b1, b2) => b2.likes - b1.likes), [blogs])
+  const sortedBlogs = useMemo(
+    () => [...blogs].sort((b1, b2) => b2.likes - b1.likes),
+    [blogs]
+  )
 
   let timeoutID
-  const notify = (message, type='info') => {
+  const notify = (message, type = 'info') => {
     clearTimeout(timeoutID)
     timeoutID = setNotification({ message, type })
     setTimeout(() => {
@@ -54,10 +56,10 @@ const App = () => {
     }
   }
 
-  const onBlogLike = async blogData => {
+  const onBlogLike = async (blogData) => {
     try {
       const blogsCopy = [...blogs]
-      blogsCopy.find(blog => blog.id === blogData.id).likes += 1
+      blogsCopy.find((blog) => blog.id === blogData.id).likes += 1
       setBlogs(blogsCopy)
       // NOTE - While the instructions mentioned sending all data back to the server, sending only a specific field e.g. likes works with the current backend implementation.
       await blogService.updateBlog(blogData.id, { likes: blogData.likes + 1 })
@@ -67,10 +69,10 @@ const App = () => {
     }
   }
 
-  const onBlogDelete = async id => {
+  const onBlogDelete = async (id) => {
     try {
       await blogService.deleteBlog(id)
-      setBlogs(blogs => blogs.filter(blog => blog.id !== id))
+      setBlogs((blogs) => blogs.filter((blog) => blog.id !== id))
       notify('Blog removed successfully!')
     } catch (error) {
       notify('Failed to remove blog!', 'error')
@@ -102,10 +104,8 @@ const App = () => {
 
   // On user change - Update blogService auth token
   useEffect(() => {
-    if (user)
-      blogService.setToken(user.token)
+    if (user) blogService.setToken(user.token)
   }, [user])
-
 
   if (user === undefined) {
     return (
@@ -121,13 +121,20 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification {...notification} />
-      <p>User {user.name} logged in <button onClick={onLogout}>logout</button></p>
+      <p>
+        User {user.name} logged in <button onClick={onLogout}>logout</button>
+      </p>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm onSubmit={onBlogCreate} />
       </Togglable>
-      {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} onLike={onBlogLike} onDelete={onBlogDelete} />
-      )}
+      {sortedBlogs.map((blog) => (
+        <Blog
+          key={blog.id}
+          blog={blog}
+          onLike={onBlogLike}
+          onDelete={onBlogDelete}
+        />
+      ))}
     </div>
   )
 }

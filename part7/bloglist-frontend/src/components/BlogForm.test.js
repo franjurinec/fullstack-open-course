@@ -8,7 +8,7 @@ describe('<BlogForm />', () => {
     const testData = {
       title: 'Test Title',
       author: 'Some User',
-      url: 'https://blog.test.com'
+      url: 'https://blog.test.com',
     }
 
     const submitHandler = jest.fn()
@@ -31,5 +31,4 @@ describe('<BlogForm />', () => {
     expect(submitHandler.mock.calls[0][1]).toBe(testData.author)
     expect(submitHandler.mock.calls[0][2]).toBe(testData.url)
   })
-
 })

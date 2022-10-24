@@ -1,25 +1,25 @@
 /// <reference types="Cypress" />
 
-describe('Blog app', function() {
-  beforeEach(function() {
+describe('Blog app', function () {
+  beforeEach(function () {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
     const user = {
       name: 'Test User',
       username: 'root',
-      password: 'password'
+      password: 'password',
     }
     cy.request('POST', 'http://localhost:3003/api/users/', user)
     cy.visit('http://localhost:3000')
   })
 
-  it('Login form is shown', function() {
+  it('Login form is shown', function () {
     cy.contains('Log in to application')
     cy.contains('username')
     cy.contains('password')
   })
 
-  describe('Login', function() {
-    it('succeeds with correct credentials', function() {
+  describe('Login', function () {
+    it('succeeds with correct credentials', function () {
       cy.get('#username').type('root')
       cy.get('#password').type('password')
       cy.get('#login-button').click()
@@ -27,35 +27,39 @@ describe('Blog app', function() {
       cy.contains('Logged in as Test User!')
     })
 
-    it('fails with wrong credentials', function() {
+    it('fails with wrong credentials', function () {
       cy.get('#username').type('root')
       cy.get('#password').type('wrong')
       cy.get('#login-button').click()
 
-      cy.contains('Wrong username or password!').should('have.css', 'color', 'rgb(255, 0, 0)')
+      cy.contains('Wrong username or password!').should(
+        'have.css',
+        'color',
+        'rgb(255, 0, 0)'
+      )
     })
   })
 
-  describe('When logged in', function() {
-    beforeEach(function() {
+  describe('When logged in', function () {
+    beforeEach(function () {
       cy.login({ username: 'root', password: 'password' })
     })
 
     const blogExample = {
       title: 'Test Blog',
       author: 'Johnny',
-      url: 'http://example.blog.url'
+      url: 'http://example.blog.url',
     }
 
     const blogExample2 = {
       title: 'Another Blog',
       author: 'Jimmy',
-      url: 'http://example2.blog.url'
+      url: 'http://example2.blog.url',
     }
 
-    const blogHeader = blog => `${blog.title} ${blog.author}`
+    const blogHeader = (blog) => `${blog.title} ${blog.author}`
 
-    const createBlog = blog => {
+    const createBlog = (blog) => {
       cy.contains('button', 'new blog').click()
       cy.get('#title').type(blog.title)
       cy.get('#author').type(blog.author)
@@ -63,12 +67,12 @@ describe('Blog app', function() {
       cy.get('#blog-submit').click()
     }
 
-    it('A blog can be created', function() {
+    it('A blog can be created', function () {
       createBlog(blogExample)
       cy.contains(blogHeader(blogExample))
     })
 
-    it('A blog can be liked', function() {
+    it('A blog can be liked', function () {
       createBlog(blogExample)
       const header = blogHeader(blogExample)
       cy.contains(header).contains('button', 'show').click()
@@ -76,7 +80,7 @@ describe('Blog app', function() {
       cy.contains(header).parent().contains('likes 1')
     })
 
-    it('A blog can be deleted', function() {
+    it('A blog can be deleted', function () {
       createBlog(blogExample)
       const header = blogHeader(blogExample)
       cy.contains(header).contains('button', 'show').click()
@@ -84,7 +88,7 @@ describe('Blog app', function() {
       cy.contains(header).should('not.exist')
     })
 
-    it('A blog cannot be deleted by users other than creator', function() {
+    it('A blog cannot be deleted by users other than creator', function () {
       createBlog(blogExample)
 
       const header = blogHeader(blogExample)
@@ -92,7 +96,7 @@ describe('Blog app', function() {
       const user = {
         name: 'Other Test User',
         username: 'user',
-        password: 'password'
+        password: 'password',
       }
       cy.request('POST', 'http://localhost:3003/api/users/', user)
       cy.login(user)
@@ -102,7 +106,7 @@ describe('Blog app', function() {
       cy.contains(header)
     })
 
-    it('Blogs are sorted by like count', function() {
+    it('Blogs are sorted by like count', function () {
       createBlog(blogExample)
       const header1 = blogHeader(blogExample)
 
@@ -121,7 +125,6 @@ describe('Blog app', function() {
       cy.contains(header2).parent().contains('likes 1')
       cy.contains(header2).parent().contains('button', 'like').click()
       cy.contains(header2).parent().contains('likes 2')
-
 
       cy.get('.blog').eq(0).contains(header2)
       cy.get('.blog').eq(1).contains(header1)
