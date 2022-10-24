@@ -4,6 +4,7 @@ const Notification = ({ message, type }) => {
   if (!message) return null
 
   const notificationStyle = {
+    display: 'inline-block',
     color: type === 'error' ? 'red' : 'green',
     fontSize: 16,
     fontWeight: 'bold',
