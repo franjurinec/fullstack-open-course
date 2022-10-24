@@ -2,13 +2,13 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 const Notification = () => {
-  const { message, type } = useSelector((state) => state.notification)
+  const notification = useSelector((state) => state.notification)
 
-  if (!message) return null
+  if (!notification) return null
 
   const notificationStyle = {
     display: 'inline-block',
-    color: type === 'error' ? 'red' : 'green',
+    color: notification.type === 'error' ? 'red' : 'green',
     fontSize: 16,
     fontWeight: 'bold',
     border: 2,
@@ -18,7 +18,7 @@ const Notification = () => {
     margin: 4,
   }
 
-  return <div style={notificationStyle}>{message}</div>
+  return <div style={notificationStyle}>{notification.message}</div>
 }
 
 Notification.propTypes = {
