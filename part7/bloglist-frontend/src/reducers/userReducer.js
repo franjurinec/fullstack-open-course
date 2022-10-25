@@ -1,57 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit'
-import blogService from '../services/blogs'
-import loginService from '../services/login'
-import { notify } from './notificationReducer'
+import userService from '../services/users'
 
-const USER_KEY = 'loggedBloglistUser'
-
-const initialState = null
+const initialState = []
 
 const userSlice = createSlice({
-  name: 'user',
+  name: 'users',
   initialState,
   reducers: {
-    setUser(_, action) {
+    setUsers(_, action) {
       return action.payload
-    },
-    unsetUser() {
-      return initialState
     }
   }
 })
 
-export const { setUser, unsetUser } = userSlice.actions
+export const { setUsers } = userSlice.actions
 
-export const loadStoredUser = () => {
-  return (dispatch) => {
-    const loggedUserJSON = localStorage.getItem(USER_KEY)
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      blogService.setToken(user.token)
-      dispatch(setUser(user))
-    }
-  }
-}
-
-export const login = (username, password) => {
+export const initializeUsers = () => {
   return async (dispatch) => {
-    try {
-      const user = await loginService.login(username, password)
-      blogService.setToken(user.token)
-      localStorage.setItem(USER_KEY, JSON.stringify(user))
-      dispatch(setUser(user))
-      dispatch(notify(`Logged in as ${user.name}!`))
-    } catch (error) {
-      dispatch(notify('Wrong username or password!', 'error'))
-    }
-  }
-}
-
-export const logout = () => {
-  return (dispatch) => {
-    localStorage.removeItem(USER_KEY)
-    dispatch(unsetUser())
-    dispatch(notify('Logged out!'))
+    const users = await userService.getAll()
+    dispatch(setUsers(users))
   }
 }
 
