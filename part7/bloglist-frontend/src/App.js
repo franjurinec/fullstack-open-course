@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadStoredUser } from './reducers/loginReducer'
@@ -23,14 +23,30 @@ const App = () => {
     dispatch(initializeUsers())
   }, [dispatch])
 
+  const margin = {
+    margin: 5
+  }
+
+  const headerBg = {
+    background: 'gainsboro'
+  }
+
   return user ? (
     <Router>
-      <h2>blogs</h2>
-      <Notification />
-      <div>
-        <div>User {user.name} logged in</div>
-        <button onClick={() => dispatch(logout())}>logout</button>
+      <div style={headerBg}>
+        <Link style={margin} to="/">
+          blogs
+        </Link>
+        <Link style={margin} to="/users">
+          users
+        </Link>
+        <span style={margin}>{user.name} logged in</span>
+        <button style={margin} onClick={() => dispatch(logout())}>
+          logout
+        </button>
       </div>
+      <h2>blog app</h2>
+      <Notification />
       <Routes>
         <Route path="/" element={<Blogs />} />
         <Route path="/blogs" element={<Blogs />} />
