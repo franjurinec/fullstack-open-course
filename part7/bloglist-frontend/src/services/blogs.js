@@ -30,6 +30,23 @@ const getAll = async () => {
   return response.data
 }
 
-const blogService = { getAll, createBlog, updateBlog, deleteBlog, setToken }
+const comment = async (id, comment) => {
+  const config = { headers: { Authorization: token } }
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    { comment },
+    config
+  )
+  return response.data
+}
+
+const blogService = {
+  getAll,
+  comment,
+  createBlog,
+  updateBlog,
+  deleteBlog,
+  setToken
+}
 
 export default blogService
