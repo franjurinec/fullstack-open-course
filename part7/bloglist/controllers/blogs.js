@@ -50,7 +50,7 @@ blogsRouter.post('/', async (req, res) => {
 
   const blog = new Blog({ user: user._id, ...req.body })
   const result = await blog.save()
-  user.blogs.concat(result._id)
+  user.blogs.push(result._id)
   await user.save()
 
   res.status(201).json(result)
