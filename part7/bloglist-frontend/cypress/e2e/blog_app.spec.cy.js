@@ -6,7 +6,7 @@ describe('Blog app', function () {
     const user = {
       name: 'Test User',
       username: 'root',
-      password: 'password',
+      password: 'password'
     }
     cy.request('POST', 'http://localhost:3003/api/users/', user)
     cy.visit('http://localhost:3000')
@@ -48,13 +48,13 @@ describe('Blog app', function () {
     const blogExample = {
       title: 'Test Blog',
       author: 'Johnny',
-      url: 'http://example.blog.url',
+      url: 'http://example.blog.url'
     }
 
     const blogExample2 = {
       title: 'Another Blog',
       author: 'Jimmy',
-      url: 'http://example2.blog.url',
+      url: 'http://example2.blog.url'
     }
 
     const blogHeader = (blog) => `${blog.title} ${blog.author}`
@@ -74,36 +74,34 @@ describe('Blog app', function () {
 
     it('A blog can be liked', function () {
       createBlog(blogExample)
-      const header = blogHeader(blogExample)
-      cy.contains(header).contains('button', 'show').click()
-      cy.contains(header).parent().contains('button', 'like').click()
-      cy.contains(header).parent().contains('likes 1')
+      cy.contains(blogHeader(blogExample)).click()
+      cy.contains('button', 'like').click()
+      cy.contains('1 likes')
     })
 
     it('A blog can be deleted', function () {
       createBlog(blogExample)
       const header = blogHeader(blogExample)
-      cy.contains(header).contains('button', 'show').click()
-      cy.contains(header).parent().contains('button', 'remove').click()
+      cy.contains(blogHeader(blogExample)).click()
+      cy.contains('added by Test User')
+      cy.contains('button', 'remove').click()
       cy.contains(header).should('not.exist')
     })
 
     it('A blog cannot be deleted by users other than creator', function () {
       createBlog(blogExample)
 
-      const header = blogHeader(blogExample)
-
       const user = {
         name: 'Other Test User',
         username: 'user',
-        password: 'password',
+        password: 'password'
       }
+
       cy.request('POST', 'http://localhost:3003/api/users/', user)
       cy.login(user)
 
-      cy.contains(header).contains('button', 'show').click()
-      cy.contains(header).parent().contains('button', 'remove').click()
-      cy.contains(header)
+      cy.contains(blogHeader(blogExample)).click()
+      cy.contains('button', 'remove').should('not.exist')
     })
 
     it('Blogs are sorted by like count', function () {
@@ -113,19 +111,21 @@ describe('Blog app', function () {
       createBlog(blogExample2)
       const header2 = blogHeader(blogExample2)
 
-      cy.contains(header1).contains('button', 'show').click()
-      cy.contains(header1).parent().contains('button', 'like').click()
-      cy.contains(header1).parent().contains('likes 1')
+      cy.contains(header1).click()
+      cy.contains('button', 'like').click()
+      cy.contains('1 likes')
 
+      cy.visit('http://localhost:3000/')
       cy.get('.blog').eq(0).contains(header1)
       cy.get('.blog').eq(1).contains(header2)
 
-      cy.contains(header2).contains('button', 'show').click()
-      cy.contains(header2).parent().contains('button', 'like').click()
-      cy.contains(header2).parent().contains('likes 1')
-      cy.contains(header2).parent().contains('button', 'like').click()
-      cy.contains(header2).parent().contains('likes 2')
+      cy.contains(header2).click()
+      cy.contains('button', 'like').click()
+      cy.contains('1 likes')
+      cy.contains('button', 'like').click()
+      cy.contains('2 likes')
 
+      cy.visit('http://localhost:3000/')
       cy.get('.blog').eq(0).contains(header2)
       cy.get('.blog').eq(1).contains(header1)
     })

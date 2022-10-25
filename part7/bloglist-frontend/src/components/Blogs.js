@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { createBlog, deleteBlog, likeBlog } from '../reducers/blogReducer'
-import Blog from './Blog'
+import { Link } from 'react-router-dom'
+import { createBlog } from '../reducers/blogReducer'
 import BlogForm from './BlogForm'
 import Togglable from './Toggleable'
 
@@ -18,18 +18,25 @@ const Blogs = () => {
     dispatch(createBlog(blog))
   }
 
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
   return (
     <div>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm onSubmit={onBlogFormSubmit} />
       </Togglable>
       {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          onLike={(blog) => dispatch(likeBlog(blog))}
-          onDelete={(id) => dispatch(deleteBlog(id))}
-        />
+        <div className="blog" style={blogStyle} key={blog.id}>
+          <Link to={`/blogs/${blog.id}`}>
+            {blog.title} {blog.author}
+          </Link>
+        </div>
       ))}
     </div>
   )

@@ -7,6 +7,7 @@ import { initializeUsers } from './reducers/userReducer'
 import { logout } from './reducers/loginReducer'
 import Notification from './components/Notification'
 import Blogs from './components/Blogs'
+import Blog from './components/Blog'
 import Login from './components/Login'
 import Users from './components/Users'
 import User from './components/User'
@@ -32,6 +33,8 @@ const App = () => {
       </div>
       <Routes>
         <Route path="/" element={<Blogs />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blogs/:id" element={<Blog />} />
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
       </Routes>
