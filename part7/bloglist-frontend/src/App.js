@@ -46,7 +46,6 @@ const App = () => {
         </button>
       </div>
       <h2>blog app</h2>
-      <Notification />
       <Routes>
         <Route path="/" element={<Blogs />} />
         <Route path="/blogs" element={<Blogs />} />
@@ -54,6 +53,7 @@ const App = () => {
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
       </Routes>
+      <Notification />
     </Router>
   ) : (
     <Login />

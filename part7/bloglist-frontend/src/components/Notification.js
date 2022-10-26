@@ -1,3 +1,4 @@
+import { Alert, AlertIcon, AlertTitle, Center } from '@chakra-ui/react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
@@ -6,19 +7,14 @@ const Notification = () => {
 
   if (!notification) return null
 
-  const notificationStyle = {
-    display: 'inline-block',
-    color: notification.type === 'error' ? 'red' : 'green',
-    fontSize: 16,
-    fontWeight: 'bold',
-    border: 2,
-    borderStyle: 'solid',
-    borderRadius: 4,
-    padding: 2,
-    margin: 4
-  }
-
-  return <div style={notificationStyle}>{notification.message}</div>
+  return (
+    <Center position="fixed" top="0" mt="6" w="100vw" pointerEvents="none">
+      <Alert variant="solid" status={notification.type} w="xs" rounded="lg">
+        <AlertIcon />
+        <AlertTitle>{notification.message}</AlertTitle>
+      </Alert>
+    </Center>
+  )
 }
 
 Notification.propTypes = {
