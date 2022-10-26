@@ -1,5 +1,14 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  VStack
+} from '@chakra-ui/react'
 
 const BlogForm = ({ onSubmit }) => {
   const [titleInput, setTitleInput] = useState('')
@@ -7,8 +16,8 @@ const BlogForm = ({ onSubmit }) => {
   const [urlInput, setUrlInput] = useState('')
 
   return (
-    <div>
-      <h2>create new</h2>
+    <Box>
+      <Heading size="md">Create New</Heading>
       <form
         onSubmit={async (event) => {
           event.preventDefault()
@@ -22,38 +31,40 @@ const BlogForm = ({ onSubmit }) => {
           setUrlInput('')
         }}
       >
-        <div>
-          title:
-          <input
-            id="title"
-            value={titleInput}
-            placeholder="Enter Title"
-            onChange={({ target }) => setTitleInput(target.value)}
-          />
-        </div>
-        <div>
-          author:
-          <input
-            id="author"
-            value={authorInput}
-            placeholder="John Doe"
-            onChange={({ target }) => setAuthorInput(target.value)}
-          />
-        </div>
-        <div>
-          url:
-          <input
-            id="url"
-            value={urlInput}
-            placeholder="http://example.url.com"
-            onChange={({ target }) => setUrlInput(target.value)}
-          />
-        </div>
-        <button id="blog-submit" type="submit">
-          create
-        </button>
+        <VStack spacing="2" alignItems="start" w="md" py="2">
+          <FormControl>
+            <FormLabel>Title:</FormLabel>
+            <Input
+              id="title"
+              value={titleInput}
+              placeholder="Enter Title"
+              onChange={({ target }) => setTitleInput(target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Author:</FormLabel>
+            <Input
+              id="author"
+              value={authorInput}
+              placeholder="John Doe"
+              onChange={({ target }) => setAuthorInput(target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>URL:</FormLabel>
+            <Input
+              id="url"
+              value={urlInput}
+              placeholder="http://example.url.com"
+              onChange={({ target }) => setUrlInput(target.value)}
+            />
+          </FormControl>
+          <Button id="blog-submit" type="submit">
+            Create
+          </Button>
+        </VStack>
       </form>
-    </div>
+    </Box>
   )
 }
 

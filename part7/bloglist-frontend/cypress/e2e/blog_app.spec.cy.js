@@ -58,7 +58,7 @@ describe('Blog app', function () {
     const blogHeader = (blog) => `${blog.title} ${blog.author}`
 
     const createBlog = (blog) => {
-      cy.contains('button', 'new blog').click()
+      cy.contains('button', 'New Blog').click()
       cy.get('#title').type(blog.title)
       cy.get('#author').type(blog.author)
       cy.get('#url').type(blog.url)
@@ -73,16 +73,16 @@ describe('Blog app', function () {
     it('A blog can be liked', function () {
       createBlog(blogExample)
       cy.contains(blogHeader(blogExample)).click()
-      cy.contains('button', 'like').click()
-      cy.contains('1 likes')
+      cy.contains('button', 'Like').click()
+      cy.contains('1 like(s)')
     })
 
     it('A blog can be deleted', function () {
       createBlog(blogExample)
       const header = blogHeader(blogExample)
       cy.contains(blogHeader(blogExample)).click()
-      cy.contains('added by Test User')
-      cy.contains('button', 'remove').click()
+      cy.contains('Added by Test User')
+      cy.contains('button', 'Remove Blog').click()
       cy.contains(header).should('not.exist')
     })
 
@@ -110,18 +110,18 @@ describe('Blog app', function () {
       const header2 = blogHeader(blogExample2)
 
       cy.contains(header1).click()
-      cy.contains('button', 'like').click()
-      cy.contains('1 likes')
+      cy.contains('button', 'Like').click()
+      cy.contains('1 like(s')
 
       cy.visit('http://localhost:3000/')
       cy.get('.blog').eq(0).contains(header1)
       cy.get('.blog').eq(1).contains(header2)
 
       cy.contains(header2).click()
-      cy.contains('button', 'like').click()
-      cy.contains('1 likes')
-      cy.contains('button', 'like').click()
-      cy.contains('2 likes')
+      cy.contains('button', 'Like').click()
+      cy.contains('1 like(s')
+      cy.contains('button', 'Like').click()
+      cy.contains('2 like(s')
 
       cy.visit('http://localhost:3000/')
       cy.get('.blog').eq(0).contains(header2)

@@ -1,3 +1,17 @@
+import {
+  VStack,
+  Heading,
+  Divider,
+  Link,
+  Text,
+  Button,
+  HStack,
+  Input,
+  Box,
+  Flex,
+  UnorderedList,
+  ListItem
+} from '@chakra-ui/react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -31,35 +45,52 @@ const Blog = () => {
   if (!blog) return null
 
   return (
-    <div>
-      <h2>
+    <VStack spacing="4" alignItems="start">
+      <Heading color="gray.600" size="xl">
         {blog.title} {blog.author}
-      </h2>
-      <div>{blog.url}</div>
-      <div>
-        {blog.likes} likes
-        <button onClick={() => dispatch(likeBlog(blog))}>like</button>
-      </div>
-      <div>added by {blog.user.name}</div>
-      {blog.user.username === user.username && (
-        <div>
-          <button onClick={onBlogDelete}>remove</button>
-        </div>
-      )}
-      <h4>comments</h4>
+      </Heading>
+      <Text fontSize="lg">
+        More info: <Link isExternal>{blog.url}</Link>
+      </Text>
+
+      <Divider my="4" borderColor="gray.600" />
+
+      <Flex w="full" justifyContent="space-between">
+        <HStack spacing="4">
+          <Text fontSize="xl">
+            {blog.likes} {'like(s)'}
+          </Text>
+          <Button onClick={() => dispatch(likeBlog(blog))}>Like</Button>
+        </HStack>
+        <Text fontSize="2xl">Added by {blog.user.name}</Text>
+        <Box>
+          {blog.user.username === user.username && (
+            <Button onClick={onBlogDelete}>Remove Blog</Button>
+          )}
+        </Box>
+      </Flex>
+
+      <Divider my="4" borderColor="gray.600" />
+
+      <Heading size="md">Comments:</Heading>
       <form onSubmit={onComment}>
-        <input
-          value={commentInput}
-          onChange={(e) => setCommentInput(e.target.value)}
-        ></input>
-        <button>add comment</button>
+        <VStack spacing="2" alignItems="start">
+          <Input
+            placeholder="Comment here..."
+            value={commentInput}
+            onChange={(e) => setCommentInput(e.target.value)}
+          ></Input>
+          <Button type="submit">Add Comment</Button>
+        </VStack>
       </form>
-      <ul>
+      <UnorderedList>
         {blog.comments.map((comment, idx) => (
-          <li key={idx}>{comment}</li>
+          <ListItem listStylePos="inside" key={idx}>
+            {comment}
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </UnorderedList>
+    </VStack>
   )
 }
 
