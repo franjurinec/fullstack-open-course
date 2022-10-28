@@ -55,10 +55,28 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author })
       if (!author) {
         const newAuthor = new Author({ name: args.author })
-        author = await newAuthor.save()
+        try {
+          author = await newAuthor.save()
+        } catch (error) {
+          throw new UserInputError(
+            'Invalid author name. (must be unique and at least 4 characters long)',
+            {
+              invalidArgs: args
+            }
+          )
+        }
       }
       const newBook = new Book({ ...args, author: author._id })
-      await newBook.save()
+      try {
+        await newBook.save()
+      } catch (error) {
+        throw new UserInputError(
+          'Invalid book info. (title must be unique and at least 2 characters long)',
+          {
+            invalidArgs: args
+          }
+        )
+      }
       return newBook.populate('author')
     },
     editAuthor: async (_, { name, setBornTo }) => {
