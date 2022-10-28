@@ -115,7 +115,7 @@ const resolvers = {
       })
       return newBook.populate('author')
     },
-    editAuthor: async (_root, { name, setBornTo }) => {
+    editAuthor: async (_root, { name, setBornTo }, context) => {
       if (!context.currentUser) return null
       const author = await Author.findOne({ name })
       if (!author) return null
