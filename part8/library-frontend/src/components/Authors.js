@@ -46,26 +46,30 @@ const Authors = (props) => {
               ))}
             </tbody>
           </table>
-          <h3>Set birthyear</h3>
-          <form onSubmit={onSetBirthyear}>
-            <Select
-              value={authorInput}
-              onChange={setAuthorInput}
-              options={result.data.allAuthors.map(({ name }) => ({
-                value: name,
-                label: name
-              }))}
-            />
+          {props.loggedIn && (
             <div>
-              born
-              <input
-                type='number'
-                value={birthyearInput}
-                onChange={(e) => setBirthyearInput(e.target.value)}
-              ></input>
+              <h3>Set birthyear</h3>
+              <form onSubmit={onSetBirthyear}>
+                <Select
+                  value={authorInput}
+                  onChange={setAuthorInput}
+                  options={result.data.allAuthors.map(({ name }) => ({
+                    value: name,
+                    label: name
+                  }))}
+                />
+                <div>
+                  born
+                  <input
+                    type='number'
+                    value={birthyearInput}
+                    onChange={(e) => setBirthyearInput(e.target.value)}
+                  ></input>
+                </div>
+                <button>update author</button>
+              </form>
             </div>
-            <button>update author</button>
-          </form>
+          )}
         </div>
       )}
     </div>
