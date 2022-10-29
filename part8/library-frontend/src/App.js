@@ -4,6 +4,7 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
+import Recommended from './components/Recommended'
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -25,6 +26,7 @@ const App = () => {
         {token ? (
           <span>
             <button onClick={() => setPage('add')}>add book</button>
+            <button onClick={() => setPage('recommended')}>recommended</button>
             <button onClick={logout}>logout</button>
           </span>
         ) : (
@@ -35,6 +37,8 @@ const App = () => {
       <Authors show={page === 'authors'} loggedIn={!!token} />
 
       <Books show={page === 'books'} />
+
+      <Recommended show={page === 'recommended'} />
 
       <NewBook show={page === 'add'} />
 

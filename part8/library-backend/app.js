@@ -60,6 +60,7 @@ const typeDefs = gql`
     me: User
     bookCount: Int!
     allBooks(author: String, genre: String): [Book!]!
+    allGenres: [String!]!
     authorCount: Int!
     allAuthors: [Author!]!
   }
@@ -125,11 +126,16 @@ const resolvers = {
   },
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
-    allBooks: async (_root, { genre }) => {
+    allBooks: async (_root, { genre, author }) => {
       let filter = {}
       if (genre) filter.genres = genre
+      if (author) {
+        const foundAuthor = await Author.findOne({ name: author })
+        filter.author = foundAuthor._id
+      }
       return Book.find(filter).populate('author')
     },
+    allGenres: async () => Book.distinct('genres'),
     authorCount: async () => Author.collection.countDocuments(),
     allAuthors: async () => Author.find({}),
     me: (_root, _args, context) => {
