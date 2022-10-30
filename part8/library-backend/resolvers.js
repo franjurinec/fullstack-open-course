@@ -40,6 +40,7 @@ const resolvers = {
     addBook: async (_root, args, context) => {
       if (!context.currentUser)
         throw new AuthenticationError('not authenticated')
+
       let author = await Author.findOne({ name: args.author })
       if (!author) {
         const newAuthor = new Author({ name: args.author })
@@ -52,6 +53,7 @@ const resolvers = {
           )
         })
       }
+
       const newBook = new Book({ ...args, author: author._id })
       await newBook.save().catch((_error) => {
         throw new UserInputError(
@@ -61,7 +63,12 @@ const resolvers = {
           }
         )
       })
+
+      author.bookCount++
+      await author.save()
+
       await newBook.populate('author')
+
       pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
       return newBook
     },
@@ -94,9 +101,6 @@ const resolvers = {
     me: (_root, _args, context) => {
       return context.currentUser
     }
-  },
-  Author: {
-    bookCount: async (root) => Book.countDocuments({ author: root.id })
   }
 }
 
