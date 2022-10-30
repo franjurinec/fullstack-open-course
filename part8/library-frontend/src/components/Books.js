@@ -36,7 +36,9 @@ const Books = (props) => {
             </tbody>
           </table>
           {result.data.allGenres.map((genre) => (
-            <button onClick={() => setGenre(genre)}>{genre}</button>
+            <button key={genre} onClick={() => setGenre(genre)}>
+              {genre}
+            </button>
           ))}
           <button onClick={() => setGenre(null)}>all genres</button>
         </div>

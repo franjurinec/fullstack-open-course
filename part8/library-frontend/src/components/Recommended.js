@@ -4,7 +4,10 @@ import { BOOKS_AND_GENRES, FAVOURITE_GENRE } from '../queries'
 const Recommended = (props) => {
   const userResult = useQuery(FAVOURITE_GENRE)
 
-  const genre = userResult.loading ? null : userResult.data.me.favouriteGenre
+  const genre =
+    userResult.loading || !userResult.data.me
+      ? null
+      : userResult.data.me.favouriteGenre
 
   const result = useQuery(BOOKS_AND_GENRES, {
     variables: {
