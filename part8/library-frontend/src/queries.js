@@ -7,7 +7,6 @@ const BOOK_DETAILS = gql`
       name
     }
     published
-    genres
   }
 `
 
@@ -25,15 +24,21 @@ export const BOOK_ADDED = gql`
   subscription {
     bookAdded {
       ...BookDetails
+      genres
     }
   }
 
   ${BOOK_DETAILS}
 `
 
-export const BOOKS_AND_GENRES = gql`
-  query booksAndGenres($genre: String) {
+export const ALL_GENRES = gql`
+  query {
     allGenres
+  }
+`
+
+export const BOOKS_BY_GENRE = gql`
+  query booksAndGenres($genre: String) {
     allBooks(genre: $genre) {
       ...BookDetails
     }
