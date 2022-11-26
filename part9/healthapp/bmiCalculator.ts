@@ -20,4 +20,11 @@ const calculateBmi = (height: number, weight: number): BmiState => {
     return "Obese (Class III)"
 }
 
-console.log(calculateBmi(180, 74))
+try {
+    const height = Number(process.argv[2])
+    const weight = Number(process.argv[3])
+    console.log(calculateBmi(height, weight))
+  } catch (error) {
+    console.log('Invalid parameters.')
+  }
+
