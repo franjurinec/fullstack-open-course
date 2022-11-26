@@ -7,7 +7,7 @@ type BmiState = "Underweight (Severe thinness)"
 | "Obese (Class II)" 
 | "Obese (Class III)" 
 
-const calculateBmi = (height: number, weight: number): BmiState => {
+export const calculateBmi = (height: number, weight: number): BmiState => {
     const bmi = weight / (height / 100) ** 2 
 
     if (bmi < 16) return "Underweight (Severe thinness)"
@@ -19,12 +19,3 @@ const calculateBmi = (height: number, weight: number): BmiState => {
     if (bmi < 40) return "Obese (Class II)"
     return "Obese (Class III)"
 }
-
-try {
-    const height = Number(process.argv[2])
-    const weight = Number(process.argv[3])
-    console.log(calculateBmi(height, weight))
-  } catch (error) {
-    console.log('Invalid parameters.')
-  }
-

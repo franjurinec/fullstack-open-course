@@ -8,7 +8,7 @@ interface ExerciseResult {
   average: number
 }
 
-const calculateExercise = (hours: number[], target: number): ExerciseResult => {
+export const calculateExercise = (hours: number[], target: number): ExerciseResult => {
   const total = hours.reduce((a, v) => a + v)
   const periodLength = hours.length
   const trainingDays = hours.filter(h => h > 0).length
@@ -37,13 +37,4 @@ const calculateExercise = (hours: number[], target: number): ExerciseResult => {
     average
   }
 }
-
-try {
-  const target = Number(process.argv[2])
-  const hours = process.argv.slice(3).map(v => Number(v))
-  console.log(calculateExercise(hours, target))
-} catch (error) {
-  console.log('Invalid parameters.')
-}
-
 
