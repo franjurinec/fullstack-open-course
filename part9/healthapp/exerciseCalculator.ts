@@ -15,7 +15,7 @@ export const calculateExercise = (hours: number[], target: number): ExerciseResu
   const average = total / periodLength;
   
   let rating = 3;
-  let ratingDescription = 'Not close to target';
+  let ratingDescription = 'Target reached';
   
   if (average < target) {
     rating = 2;
@@ -24,7 +24,7 @@ export const calculateExercise = (hours: number[], target: number): ExerciseResu
 
   if (average < (0.75 * target)) {
     rating = 1;
-    ratingDescription = 'Target reached';
+    ratingDescription = 'Not close to target';
   }
 
   return {
