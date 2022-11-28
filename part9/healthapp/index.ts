@@ -27,20 +27,20 @@ app.get('/bmi', (req, res) => {
 });
 
 app.post('/exercises', (req, res) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  if (!req.body.daily_exercises || !req.body.target)
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const {daily_exercises, target} = req.body;
+
+  if (!daily_exercises || !target)
     return res.json({error: 'parameters missing'});
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-  const hours: number[] = req.body.daily_exercises;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-  const target: number = req.body.target;
+  const isNumberArray = (value: unknown): value is number[] => {
+    return Array.isArray(value) && value.every(x => typeof x === 'number');
+  };
 
-  if (!hours || !target)
+  if (typeof target !== 'number' || !isNumberArray(daily_exercises))
     return res.json({error: 'malformed parameters'});
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  const result = calculateExercise(hours, target);
+  const result = calculateExercise(daily_exercises, target);
   return res.json(result);
 });
 
