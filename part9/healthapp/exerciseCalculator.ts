@@ -9,22 +9,22 @@ interface ExerciseResult {
 }
 
 export const calculateExercise = (hours: number[], target: number): ExerciseResult => {
-  const total = hours.reduce((a, v) => a + v)
-  const periodLength = hours.length
-  const trainingDays = hours.filter(h => h > 0).length
-  const average = total / periodLength
+  const total = hours.reduce((a, v) => a + v);
+  const periodLength = hours.length;
+  const trainingDays = hours.filter(h => h > 0).length;
+  const average = total / periodLength;
   
-  let rating = 3
-  let ratingDescription = 'Not close to target'
+  let rating = 3;
+  let ratingDescription = 'Not close to target';
   
   if (average < target) {
-    rating = 2
-    ratingDescription = 'Almost reached target'
+    rating = 2;
+    ratingDescription = 'Almost reached target';
   }
 
   if (average < (0.75 * target)) {
-    rating = 1
-    ratingDescription = 'Target reached'
+    rating = 1;
+    ratingDescription = 'Target reached';
   }
 
   return {
@@ -35,6 +35,6 @@ export const calculateExercise = (hours: number[], target: number): ExerciseResu
     ratingDescription,
     target,
     average
-  }
-}
+  };
+};
 
