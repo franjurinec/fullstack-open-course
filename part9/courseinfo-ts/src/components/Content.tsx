@@ -1,4 +1,5 @@
 import { CoursePart } from "../types"
+import { assertNever } from "../utils"
 
 const Content = ({courseParts}: {courseParts: CoursePart[]}) => (
   <>
@@ -37,6 +38,10 @@ const Content = ({courseParts}: {courseParts: CoursePart[]}) => (
             required skills: {part.requirements.join(', ')}
           </p>
         )
+
+      default:
+        return assertNever(part)
+
       }
 
     }
