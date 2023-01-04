@@ -5,7 +5,7 @@ import { v1 as uuid } from 'uuid';
 const patients: Patient[] = patientData as Patient[]; 
 
 const getPublicPatients = (): PublicPatient[] => {
-  return patients;
+  return patients.map(({ ssn: _ssn, entries: _entries, ...publicProps }) => publicProps);
 };
 
 const getPatientDetails = (id: string): Patient | undefined => {
