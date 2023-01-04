@@ -1,6 +1,6 @@
 # Fullstack Open Course
-|||
-| --- | --- |
+|            | Content Description |
+|    ----    | --- |
 | __Part 0__ | Web Page Sequence Diagrams |
 | __Part 1__ | React |
 | __Part 2__ | Web App <-> Server Communication |
