@@ -2,7 +2,7 @@ import { Typography } from "@material-ui/core";
 import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useStateValue } from "../state";
+import { addPatient, useStateValue } from "../state";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 
@@ -19,7 +19,7 @@ const PatientDetailsPage = () => {
                     const { data: patientWithDetails } = await axios.get<Patient>(
                         `${apiBaseUrl}/patients/${patient.id}`
                     );
-                    dispatch({type: "ADD_PATIENT", payload: patientWithDetails});
+                    dispatch(addPatient(patientWithDetails));
                 } catch (e) {
                     console.error(e);
                 }
