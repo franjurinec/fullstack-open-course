@@ -3,9 +3,10 @@ import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { addPatient, useStateValue } from "../state";
-import { Patient } from "../types";
+import { Entry, Patient } from "../types";
+import { assertNever } from "../utils";
 import { apiBaseUrl } from "../constants";
-import { grey } from "@material-ui/core/colors";
+import { green, grey, orange, red, yellow } from "@material-ui/core/colors";
 
 const PatientDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
@@ -35,6 +36,50 @@ const PatientDetailsPage = () => {
             Patient not found.
         </Typography>
     );
+
+    const EntrySpecificFields = ({ entry }: { entry: Entry }) => {
+        switch (entry.type) {
+            case "Hospital":
+                return (
+                    <>
+                        <Typography align="left" variant="subtitle1">
+                            <b>Discharged on:</b> {entry.discharge.date}
+                        </Typography>
+                        <Typography align="left" variant="subtitle1">
+                            <b>Discharge criteria:</b> {entry.discharge.criteria}
+                        </Typography>
+                    </>
+                );
+            case "HealthCheck":
+                const healthMapping = {
+                    0: { color: green[700], text: "Good health condition." },
+                    1: { color: yellow[800], text: "Low risk health issue." },
+                    2: { color: orange[700], text: "High risk health issue." },
+                    3: { color: red[700], text: "Critical health condition." }
+                };
+
+                return (
+                    <Typography style={{ color: healthMapping[entry.healthCheckRating].color }} align="left" variant="subtitle1">
+                        <b>{healthMapping[entry.healthCheckRating].text}</b>
+                    </Typography>
+                );
+            case "OccupationalHealthcare":
+                return (
+                    <>
+                        <Typography align="left" variant="subtitle1">
+                            <b>Employer:</b> {entry.employerName}
+                        </Typography>
+                        {entry.sickLeave &&
+                            <Typography align="left" variant="subtitle1">
+                                <b>Sick leave:</b> {entry.sickLeave.startDate} - {entry.sickLeave.endDate}
+                            </Typography>
+                        }
+                    </>
+                );
+            default:
+                return assertNever(entry);
+        }
+    };
 
 
 
@@ -68,7 +113,7 @@ const PatientDetailsPage = () => {
                             <Typography align="left" variant="subtitle1">
                                 <b>Description:</b> {entry.description}
                             </Typography>
-
+                            <EntrySpecificFields entry={entry} />
                             {(entry.diagnosisCodes && entry.diagnosisCodes.length > 0) &&
                                 <>
                                     <Typography align="left" variant="subtitle1">
@@ -79,7 +124,9 @@ const PatientDetailsPage = () => {
                                     </List>
                                 </>
                             }
-
+                            <Typography align="left" variant="subtitle1">
+                                <i>Diagnosis by {entry.specialist}</i>
+                            </Typography>
                         </Box>
                     ))}
                 </>
