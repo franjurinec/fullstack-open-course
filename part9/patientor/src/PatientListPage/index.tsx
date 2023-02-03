@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import { Box, Table, Button, TableHead, Typography } from "@material-ui/core";
-
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import AddPatientModal from "../AddPatientModal";
 import { Patient } from "../types";

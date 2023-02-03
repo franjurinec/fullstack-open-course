@@ -9,7 +9,7 @@ import { grey } from "@material-ui/core/colors";
 
 const PatientDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
-    const [{ patients }, dispatch] = useStateValue();
+    const [{ patients, diagnoses }, dispatch] = useStateValue();
 
     const patient = id ? patients[id] : undefined;
 
@@ -75,7 +75,7 @@ const PatientDetailsPage = () => {
                                         <b>Diagnosis Codes:</b>
                                     </Typography>
                                     <List>
-                                        {entry.diagnosisCodes.map(code => (<ListItemText inset key={code}>{code}</ListItemText>))}
+                                        {entry.diagnosisCodes.map(code => (<ListItemText inset key={code}>{`${code} - ${diagnoses[code].name}`}</ListItemText>))}
                                     </List>
                                 </>
                             }
