@@ -1,7 +1,7 @@
 import express from 'express';
 import patientService from '../services/patientService';
-import { NewPatient } from '../types';
-import { toNewPatient } from '../utils';
+import { NewEntry, NewPatient } from '../types';
+import { toNewPatient, toNewEntry } from '../utils';
 
 const router = express.Router();
 
@@ -14,10 +14,10 @@ router.get('/:id', (req, res) => {
 
   if (!patient) {
     res.status(404)
-      .send({error: `Patient with ID ${req.params.id} not found.`});
+      .send({ error: `Patient with ID ${req.params.id} not found.` });
     return;
   }
-  
+
   res.send(patient);
 });
 
@@ -32,7 +32,7 @@ router.post('/', (req, res) => {
     });
 
     const patient = patientService.addPatient(newPatient);
-  
+
     res.send(patient);
 
   } catch (error: unknown) {
@@ -40,7 +40,30 @@ router.post('/', (req, res) => {
     if (error instanceof Error) {
       errorMessage = error.message;
     }
-    res.status(400).send({error: errorMessage});
+    res.status(400).send({ error: errorMessage });
+  }
+});
+
+router.post('/:id/entry', (req, res) => {
+  try {
+    const newEntry: NewEntry = toNewEntry({
+      description: req.body.description,
+      date: req.body.date,
+      specialist: req.body.specialist,
+      diagnosisCodes: req.body.diagnosisCodes,
+      type: req.body.type,
+      healthCheckRating: req.body.healthCheckRating,
+      discharge: req.body.discharge,
+      employerName: req.body.employerName,
+      sickLeave: req.body.sickLeave
+    });
+    const patient = patientService.addPatientEntry(req.params.id, newEntry);
+    res.send(patient);
+  } catch (e) {
+    if (e instanceof Error) {
+      res.status(400)
+        .send({ error: e.message });
+    }
   }
 });
 
