@@ -28,17 +28,17 @@ app.get('/bmi', (req, res) => {
 
 app.post('/exercises', (req, res) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const {daily_exercises, target} = req.body;
+  const { daily_exercises, target } = req.body;
 
   if (!daily_exercises || !target)
-    return res.json({error: 'parameters missing'});
+    return res.json({ error: 'parameters missing' });
 
   const isNumberArray = (value: unknown): value is number[] => {
     return Array.isArray(value) && value.every(x => typeof x === 'number');
   };
 
   if (typeof target !== 'number' || !isNumberArray(daily_exercises))
-    return res.json({error: 'malformed parameters'});
+    return res.json({ error: 'malformed parameters' });
 
   const result = calculateExercise(daily_exercises, target);
   return res.json(result);

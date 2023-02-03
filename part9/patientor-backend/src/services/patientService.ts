@@ -1,8 +1,8 @@
-import patientData from '../../data/patients.json';
+import patientData from '../../data/patients';
 import { NewPatient, Patient, PublicPatient } from '../types';
 import { v1 as uuid } from 'uuid';
 
-const patients: Patient[] = patientData as Patient[]; 
+const patients: Patient[] = patientData; 
 
 const getPublicPatients = (): PublicPatient[] => {
   return patients.map(({ ssn: _ssn, entries: _entries, ...publicProps }) => publicProps);
