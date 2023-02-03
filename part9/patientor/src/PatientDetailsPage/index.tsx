@@ -1,14 +1,15 @@
-import { Typography } from "@material-ui/core";
+import { Box, List, ListItemText, Typography } from "@material-ui/core";
 import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { addPatient, useStateValue } from "../state";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
+import { grey } from "@material-ui/core/colors";
 
 const PatientDetailsPage = () => {
-    const { id } = useParams<{id: string}>();
-    const [{patients}, dispatch] = useStateValue();
+    const { id } = useParams<{ id: string }>();
+    const [{ patients }, dispatch] = useStateValue();
 
     const patient = id ? patients[id] : undefined;
 
@@ -35,26 +36,56 @@ const PatientDetailsPage = () => {
         </Typography>
     );
 
-    
+
 
     return (
-        <>
-            <Typography align="left" variant="h5" style={{ marginTop: "0.5em", marginBottom: "0.5em" }}>
+        <Box p={2} mt={4} bgcolor={grey[50]} borderRadius={'8px'}>
+            <Typography align="left" variant="h4" style={{ marginTop: "0.5em", marginBottom: "0.5em" }}>
                 {patient.name}
             </Typography>
             {patient.ssn && <Typography align="left" variant="subtitle1">
-                SSN: {patient.ssn}
+                <b>SSN:</b> {patient.ssn}
             </Typography>}
             <Typography align="left" variant="subtitle1">
-                Gender: {patient.gender.toUpperCase()}
+                <b>Gender:</b> {patient.gender.toUpperCase()}
             </Typography>
             {patient.dateOfBirth && <Typography align="left" variant="subtitle1">
-                Date of birth: {patient.dateOfBirth}
+                <b>Date of birth:</b> {patient.dateOfBirth}
             </Typography>}
             <Typography align="left" variant="subtitle1">
-                Occupation: {patient.occupation}
+                <b>Occupation:</b> {patient.occupation}
             </Typography>
-        </>
+            {(patient.entries && patient.entries.length > 0) &&
+                <>
+                    <Typography align="left" variant="h5" style={{ marginTop: "0.5em" }}>
+                        Entries
+                    </Typography>
+                    {patient.entries.map(entry => (
+                        <Box key={entry.id} my={2} p={1} borderRadius={'8px'} bgcolor={grey[200]}>
+                            <Typography align="left" variant="subtitle1">
+                                <b>Date:</b> {entry.date}
+                            </Typography>
+                            <Typography align="left" variant="subtitle1">
+                                <b>Description:</b> {entry.description}
+                            </Typography>
+
+                            {(entry.diagnosisCodes && entry.diagnosisCodes.length > 0) &&
+                                <>
+                                    <Typography align="left" variant="subtitle1">
+                                        <b>Diagnosis Codes:</b>
+                                    </Typography>
+                                    <List>
+                                        {entry.diagnosisCodes.map(code => (<ListItemText inset key={code}>{code}</ListItemText>))}
+                                    </List>
+                                </>
+                            }
+
+                        </Box>
+                    ))}
+                </>
+            }
+
+        </Box>
     );
 };
 
