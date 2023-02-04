@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - part11/**
+      - .github/workflows/pipeline.yml
 
 jobs:
   simple_deployment_pipeline:
