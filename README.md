@@ -11,3 +11,4 @@
 | __Part 7__ | Miscellaneous - React Router, Custom Hooks, Styling, Webpack |
 | __Part 8__ | GraphQL |
 | __Part 9__ | TypeScript |
+| __Part 11__ | CI/CD |
