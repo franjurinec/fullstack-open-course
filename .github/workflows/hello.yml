@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - part11/**
-      - .github/workflows/hello.yml
-    
 
 jobs:
   hello_world_job:
