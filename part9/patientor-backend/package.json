@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "tsc": "tsc",
-    "dev": "WATCHPACK_POLLING=true ts-node-dev src/index.ts",
+    "dev": "CHOKIDAR_USEPOLLING=true ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts .",
     "start": "node build/index.js"
   },

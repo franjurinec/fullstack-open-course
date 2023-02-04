@@ -1,4 +1,4 @@
-import { Box, List, ListItemText, Typography } from "@material-ui/core";
+import { Box, Button, List, ListItemText, Typography } from "@material-ui/core";
 import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
@@ -7,12 +7,50 @@ import { Entry, Patient } from "../types";
 import { assertNever } from "../utils";
 import { apiBaseUrl } from "../constants";
 import { green, grey, orange, red, yellow } from "@material-ui/core/colors";
+import AddEntryModal from "../AddEntryModal";
+import { EntryFormValues } from "../AddEntryModal/AddEntryForm";
 
 const PatientDetailsPage = () => {
     const { id } = useParams<{ id: string }>();
     const [{ patients, diagnoses }, dispatch] = useStateValue();
 
+    const getDiagnosisText = (code: string): string => {
+        const diagnosis = diagnoses.find(diagnosis => diagnosis.code === code);
+        return diagnosis ? diagnosis.name : 'Unknown';
+    };
+
     const patient = id ? patients[id] : undefined;
+
+    const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+    const [error, setError] = React.useState<string>();
+
+    const openModal = (): void => setModalOpen(true);
+
+    const closeModal = (): void => {
+        setModalOpen(false);
+        setError(undefined);
+    };
+
+    const submitNewEntry = async (values: EntryFormValues) => {
+        if (!id) return;
+        try {
+            const { data: newPatient } = await axios.post<Patient>(
+                `${apiBaseUrl}/patients/${id}/entry`,
+                values
+            );
+            dispatch(addPatient(newPatient));
+            closeModal();
+        } catch (e: unknown) {
+            if (axios.isAxiosError(e)) {
+                console.error(e?.response?.data || "Unrecognized axios error");
+                setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+            } else {
+                console.error("Unknown error", e);
+                setError("Unknown error");
+            }
+        }
+    };
+
 
     React.useEffect(() => {
         const fetchPatientDetails = async () => {
@@ -120,7 +158,7 @@ const PatientDetailsPage = () => {
                                         <b>Diagnosis Codes:</b>
                                     </Typography>
                                     <List>
-                                        {entry.diagnosisCodes.map(code => (<ListItemText inset key={code}>{`${code} - ${diagnoses[code].name}`}</ListItemText>))}
+                                        {entry.diagnosisCodes.map(code => (<ListItemText inset key={code}>{`${code} - ${getDiagnosisText(code)}`}</ListItemText>))}
                                     </List>
                                 </>
                             }
@@ -131,6 +169,16 @@ const PatientDetailsPage = () => {
                     ))}
                 </>
             }
+
+            <AddEntryModal
+                modalOpen={modalOpen}
+                onSubmit={submitNewEntry}
+                error={error}
+                onClose={closeModal}
+            />
+            <Button variant="contained" onClick={() => openModal()}>
+                Add New Entry
+            </Button>
 
         </Box>
     );

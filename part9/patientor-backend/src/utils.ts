@@ -4,8 +4,8 @@ const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;
 };
 
-const isDate = (date: string): boolean => {
-    return Boolean(Date.parse(date));
+const isDate = (date: unknown): boolean => {
+    return isString(date) && Boolean(Date.parse(date));
 };
 
 const isGender = (gender: string): gender is Gender => {
@@ -23,7 +23,7 @@ const isDischarge = (dischargeUnknown: unknown): dischargeUnknown is { date: str
 };
 
 const isHealthCheckRating = (rating: unknown): rating is HealthCheckRating => {
-    return isString(rating) && Object.values(HealthCheckRating).includes(rating);
+    return typeof rating === "number" && rating >= 0 && rating <= 3;
 };
 
 const isSickLeave = (sickLeaveUnknown: unknown): sickLeaveUnknown is { startDate: string, endDate: string } | undefined => {
@@ -150,7 +150,7 @@ const parseDischarge = (discharge: unknown): { date: string, criteria: string } 
 };
 
 const parseHealthCheckRating = (healthCheckRating: unknown) => {
-    if (!healthCheckRating || !isHealthCheckRating(healthCheckRating))
+    if (!isHealthCheckRating(healthCheckRating))
         throw new Error('Incorrect or missing healthCheckRating: ' + healthCheckRating);
     return healthCheckRating;
 };
