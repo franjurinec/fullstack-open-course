@@ -33,4 +33,7 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV PATH /root/.volta/bin:$PATH
 
+RUN apt -y update
+RUN apt -y install curl
+
 CMD [ "npm", "run", "start-prod" ]
