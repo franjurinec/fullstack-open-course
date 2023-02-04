@@ -35,3 +35,7 @@ jobs:
           start: npm run start-prod
           wait-on: http://localhost:5000
           working-directory: part11
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: deploy to fly.io
+        working-directory: part11
+        run: flyctl deploy --remote-only
