@@ -20,6 +20,6 @@ jobs:
         run: |
           date
       - name: Directory content
-        working-directory: ./part11
+        working-directory: part11
         run: |
           ls -l
