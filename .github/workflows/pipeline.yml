@@ -7,6 +7,12 @@ on:
     paths:
       - part11/**
       - .github/workflows/pipeline.yml
+  pull_request:
+    types: [opened, synchronize]
+    branches: [master]
+    paths:
+      - part11/**
+      - .github/workflows/pipeline.yml
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
@@ -39,6 +45,8 @@ jobs:
           wait-on: http://localhost:5000
           working-directory: part11
       - uses: superfly/flyctl-actions/setup-flyctl@master
+        if: ${{ github.event_name == 'push' }}
       - name: deploy to fly.io
         working-directory: part11
+        if: ${{ github.event_name == 'push' }}
         run: flyctl deploy --remote-only
