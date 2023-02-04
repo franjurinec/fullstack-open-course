@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - part11/**
+      - .github/workflows/hello.yml
     
 
 jobs:
@@ -15,3 +16,10 @@ jobs:
       - name: Say hello
         run: |
           echo "Hello World!"
+      - name: Now it is
+        run: |
+          date
+      - name: Directory content
+        working-directory: ./part11
+        run: |
+          ls -l
