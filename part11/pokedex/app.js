@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-// Heroku dynamically sets a port
+// Use port from environment variable if available
 const PORT = process.env.PORT || 5000
 
 app.use(express.static('dist'))
