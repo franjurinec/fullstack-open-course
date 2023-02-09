@@ -1,19 +1,20 @@
 name: Pokedex Deployment & Tagging Pipeline
 
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  APP_PATH: part11/pokedex
+
 on:
   push:
     branches:
       - master
     paths:
-      - part11/pokedex/**
+      - $APP_PATH/**
   pull_request:
     types: [opened, synchronize]
     branches: [master]
     paths:
-      - part11/pokedex/**
-
-env:
-  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - $APP_PATH/**
 
 jobs:
   pokedex_deployment_pipeline:
@@ -24,16 +25,16 @@ jobs:
         with:
           node-version: '16'
       - name: npm install
-        working-directory: part11
+        working-directory: $APP_PATH
         run: npm install
       - name: lint
-        working-directory: part11
+        working-directory: $APP_PATH
         run: npm run eslint
       - name: build
-        working-directory: part11
+        working-directory: $APP_PATH
         run: npm run build
       - name: test
-        working-directory: part11
+        working-directory: $APP_PATH
         run: npm run test
       - name: e2e tests
         uses: cypress-io/github-action@v5.0.8
@@ -41,11 +42,11 @@ jobs:
           build: npm run build
           start: npm run start-prod
           wait-on: http://localhost:5000
-          working-directory: part11
+          working-directory: $APP_PATH
       - uses: superfly/flyctl-actions/setup-flyctl@master
         if: ${{ github.event_name == 'push' }}
       - name: deploy to fly.io
-        working-directory: part11
+        working-directory: $APP_PATH
         if: ${{ github.event_name == 'push' }}
         run: flyctl deploy --remote-only
 
