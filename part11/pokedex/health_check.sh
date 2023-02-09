@@ -1,6 +1,6 @@
 #!/bin/bash
 
-response=$(curl -s https://young-frost-5915.fly.dev/health)
+response=$(curl -s https://pokedex-fj.fly.dev/health)
 
 if [ "$response" == "ok" ]; then
   echo "Health check success!"
