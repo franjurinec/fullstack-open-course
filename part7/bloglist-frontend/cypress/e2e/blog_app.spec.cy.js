@@ -9,7 +9,7 @@ describe('Blog app', function () {
       password: 'password'
     }
     cy.request('POST', 'http://localhost:3003/api/users/', user)
-    cy.visit('http://localhost:3000')
+    cy.visit('http://localhost:3003')
   })
 
   it('Login form is shown', function () {
@@ -113,7 +113,7 @@ describe('Blog app', function () {
       cy.contains('button', 'Like').click()
       cy.contains('1 like(s')
 
-      cy.visit('http://localhost:3000/')
+      cy.visit('http://localhost:3003/')
       cy.get('.blog').eq(0).contains(header1)
       cy.get('.blog').eq(1).contains(header2)
 
@@ -123,7 +123,7 @@ describe('Blog app', function () {
       cy.contains('button', 'Like').click()
       cy.contains('2 like(s')
 
-      cy.visit('http://localhost:3000/')
+      cy.visit('http://localhost:3003/')
       cy.get('.blog').eq(0).contains(header2)
       cy.get('.blog').eq(1).contains(header1)
     })
