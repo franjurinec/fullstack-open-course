@@ -46,6 +46,7 @@ jobs:
       - name: e2e test
         uses: cypress-io/github-action@v5.0.8
         with:
+          buid: npm i -D cypress
           start: npm run start:test
           wait-on: http://localhost:3003
           working-directory: part7/bloglist
