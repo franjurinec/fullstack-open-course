@@ -1,3 +1,5 @@
+name: Pokedex Periodic Health Check
+
 on:
   schedule:
     - cron: '*/5 * * * *'
