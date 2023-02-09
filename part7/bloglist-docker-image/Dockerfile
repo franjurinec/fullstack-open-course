@@ -3,10 +3,10 @@ ENV NODE_ENV=production
 
 WORKDIR /app
 
-COPY ["package.json", "package-lock.json*", "./"]
+COPY ["bloglist/package.json", "bloglist/package-lock.json", "./"]
 RUN npm install --production
 
-ADD ../bloglist /app
-ADD ../bloglist-frontend/build /app/build
+ADD bloglist /app
+ADD bloglist-frontend/build /app/build
 
 CMD [ "node", "." ]
