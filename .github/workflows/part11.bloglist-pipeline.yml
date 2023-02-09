@@ -4,10 +4,8 @@ on:
   push:
     branches:
       - master
-    paths:
-      - part7/bloglist/**
-      - part7/bloglist-frontend/**
-      - part7/bloglist-docker-image/**
+      - development
+
   pull_request:
     types: [opened, synchronize]
     branches: [master]
