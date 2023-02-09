@@ -1,4 +1,4 @@
-name: Bloglist Test, Build, and Publish Docker Image
+name: Bloglist Test, Build, and Push Docker Image
 
 on:
   push:
@@ -14,8 +14,8 @@ env:
   TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
 
 jobs:
-  bloglist-checks:
-    name: Perform Bloglist App Checks
+  bloglist-pipeline:
+    name: Bloglist Pipeline
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -47,27 +47,18 @@ jobs:
         uses: cypress-io/github-action@v5.0.8
         with:
           start: npm run start:test
-          wait-on: http://localhost:5000
+          wait-on: http://localhost:3003
           working-directory: part7/bloglist
 
-  push_to_registry:
-    name: Push Docker image to Docker Hub
-    if: ${{ github.event_name == 'push' }}
-    needs: [bloglist-checks]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3.3.0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      
       - name: Log in to Docker Hub
+        if: ${{ github.event_name == 'push' }}
         uses: docker/login-action@v2.1.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
       - name: Build and push Docker image
+        if: ${{ github.event_name == 'push' }}
         uses: docker/build-push-action@v4.0.0
         with:
           context: part7/bloglist-docker-image
@@ -75,4 +66,3 @@ jobs:
           tags: |
             thefenix/bloglist:latest
             thefenix/bloglist:${{ github.sha }}
-          
