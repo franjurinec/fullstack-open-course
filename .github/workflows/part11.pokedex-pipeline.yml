@@ -1,20 +1,20 @@
 name: Pokedex Deployment & Tagging Pipeline
 
-env:
-  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-  APP_PATH: part11/pokedex
-
 on:
   push:
     branches:
       - master
     paths:
-      - $APP_PATH/**
+      - part11/pokedex/**
   pull_request:
     types: [opened, synchronize]
     branches: [master]
     paths:
-      - $APP_PATH/**
+      - part11/pokedex/**
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  APP_PATH: part11/pokedex
 
 jobs:
   pokedex_deployment_pipeline:
