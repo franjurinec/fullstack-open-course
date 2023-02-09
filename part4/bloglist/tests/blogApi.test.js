@@ -4,7 +4,6 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const helper = require('./blogTestHelper')
-const bcrypt = require('bcrypt')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
