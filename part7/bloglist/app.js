@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
@@ -31,6 +32,17 @@ app.use('/api/users', usersRouter)
 if (process.env.NODE_ENV === 'test') {
   const testingRouter = require('./controllers/testing')
   app.use('/api/testing', testingRouter)
+  app.use(express.static(path.join(__dirname, '../bloglist-frontend/build')));
+  app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname, '../bloglist-frontend/build/index.html'));
+  });
+}
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/build')));
+  app.get('*', (req,res) =>{
+    res.sendFile(path.join(__dirname, '/build/index.html'));
+  });
 }
 
 module.exports = app
