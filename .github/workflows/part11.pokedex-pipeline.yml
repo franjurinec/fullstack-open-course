@@ -1,4 +1,4 @@
-name: Deployment pipeline
+name: Pokedex Deployment & Tagging Pipeline
 
 on:
   push:
@@ -6,13 +6,11 @@ on:
       - master
     paths:
       - part11/**
-      - .github/workflows/pipeline.yml
   pull_request:
     types: [opened, synchronize]
     branches: [master]
     paths:
       - part11/**
-      - .github/workflows/pipeline.yml
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
@@ -52,6 +50,7 @@ jobs:
         run: flyctl deploy --remote-only
 
   tag_release:
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip')}}
     needs: [pokedex_deployment_pipeline]
     runs-on: ubuntu-20.04
     steps:
@@ -60,7 +59,6 @@ jobs:
           fetch-depth: '0'
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.36.0
-        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip')}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
