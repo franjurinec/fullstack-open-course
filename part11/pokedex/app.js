@@ -6,9 +6,9 @@ const PORT = process.env.PORT || 5000
 
 app.use(express.static('dist'))
 
-app.get('/health', (_, res) => {
+app.get('/health', () => {
   throw new Error('Simulated deployment fail.')
-  res.send('ok')
+  //res.send('ok')
 })
 
 app.listen(PORT, () => {
