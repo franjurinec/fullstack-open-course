@@ -1,0 +1,20 @@
+docker start -i pensive_hawking
+
+# Install curl
+apt update
+apt install curl
+
+# Install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
+# Restart shell
+exit
+docker start -i pensive_hawking
+
+# Install Node.js 16
+nvm install 16
+
+# Test running index.js
+node /usr/src/app/index.js
+
+exit

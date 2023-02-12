@@ -1,0 +1,11 @@
+docker start -i pensive_hawking
+
+# Install nano
+apt update
+apt install nano
+
+# Edit index.js using nano
+nano /usr/src/app/index.js
+# Added "console.log('Hello World')" and exited via Ctrl+X, Y to save buffer
+
+exit
