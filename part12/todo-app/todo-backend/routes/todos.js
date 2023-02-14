@@ -22,6 +22,7 @@ const singleRouter = express.Router();
 const findByIdMiddleware = async (req, res, next) => {
   const { id } = req.params
   req.todo = await Todo.findById(id)
+    .catch(_ => undefined) // return undefined on Mongoose error (e.g. CastError for invalid IDs)
   if (!req.todo) return res.sendStatus(404)
 
   next()
@@ -35,12 +36,16 @@ singleRouter.delete('/', async (req, res) => {
 
 /* GET todo. */
 singleRouter.get('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
+  res.send(req.todo)
 });
 
 /* PUT todo. */
 singleRouter.put('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
+  if (req.body.text !== undefined) req.todo.text = req.body.text
+  if (req.body.done !== undefined) req.todo.done = req.body.done
+  const updatedTodo = await req.todo.save()
+
+  res.send(updatedTodo)
 });
 
 router.use('/:id', findByIdMiddleware, singleRouter)
