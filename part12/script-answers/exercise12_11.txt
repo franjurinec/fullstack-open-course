@@ -1,0 +1,31 @@
+# Start Redis (and MongoDB) and open shell
+docker compose -f docker-compose.dev.yml up -d
+docker exec -it todo-backend-redis-1 bash
+
+# Open Redis CLI
+redis-cli
+
+# Check existing keys
+KEYS *
+
+# Check value of "added_todos"
+GET added_todos
+
+# Set value of "added_todos" to 9001
+SET added_todos 9001
+
+# Check that value has increased to 9002 after new Todo is added via backend/HTTP
+GET added_todos
+
+# Delete key
+DEL added_todos
+
+# Check that "added_todos" is (nil)
+GET added_todos
+
+# Check that "added_todos" increments to 1 after new Todo is added via backend/HTTP
+GET added_todos
+
+# Exit from 'redis-cli' and 'docker exec'
+exit
+exit
