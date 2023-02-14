@@ -1,0 +1,23 @@
+# Start MongoDB and connect to the shell
+docker compose -f docker-compose.dev.yml up -d
+docker exec -it todo-backend-mongo-1 bash
+
+# Open MongoDB CLI
+mongosh -u root -p example
+
+# Open our database
+use the_database
+
+# List all Todos
+db.todos.find({})
+
+# Add new Todo
+db.todos.insertOne({ text: 'Increase the number of tools in my toolbelt', done: false })
+
+# Exit mongosh
+.exit
+
+# Exit container
+exit
+
+
