@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  bloglist-app:
+    image: bloglist-prod
+    build: 
+      context: ..
+      dockerfile: ./bloglist-docker-image/Dockerfile
+    environment:
+      - NODE_ENV=production
+      - TEST_MONGODB_URI=mongodb://test_user:test_pass@mongo:27017/test_db
+      - MONGODB_URI=mongodb://test_user:test_pass@mongo:27017/test_db
+      - PORT=8080
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: test_db
+    volumes:
+      - ../bloglist/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:

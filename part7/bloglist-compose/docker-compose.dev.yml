@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+
+  nginx:
+    container_name: reverse-proxy
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    depends_on:
+      - bloglist-frontend
+      - bloglist-backend
+
+  bloglist-frontend:
+    image: bloglist-frontend-dev
+    build:
+      context: ../bloglist-frontend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ../bloglist-frontend:/usr/src/app
+    environment:
+      - PORT=3000
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
+    ports:
+      - 3000:3000
+
+  bloglist-backend:
+    image: bloglist-backend-dev
+    build:
+      context: ../bloglist
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ../bloglist:/usr/src/app
+    environment:
+      - NODE_ENV=test
+      - TEST_MONGODB_URI=mongodb://test_user:test_pass@mongo:27017/test_db
+      - MONGODB_URI=mongodb://test_user:test_pass@mongo:27017/test_db
+      - PORT=3003
+    ports:
+      - 3003:3003
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - 3456:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: test_db
+    volumes:
+      - ../bloglist/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
