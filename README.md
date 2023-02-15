@@ -12,3 +12,4 @@
 | __Part 8__ | GraphQL |
 | __Part 9__ | TypeScript |
 | __Part 11__ | CI/CD |
+| __Part 12__ | Containers - Docker, Docker Compose |
