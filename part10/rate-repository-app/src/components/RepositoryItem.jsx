@@ -53,6 +53,11 @@ const millifyConfig = {
   lowercase: true
 }
 
+const Stat = ({ label, value }) => <View style={styles.statContainer}>
+  <Text fontWeight={'bold'}>{millify(value, millifyConfig)}</Text>
+  <Text fontSize={'subheading'}>{label}</Text>
+</View>
+
 const RepositoryItem = ({ repository }) => (
   <View style={styles.repositoryItem}>
     <View style={styles.horizontalFlexbox}>
@@ -67,25 +72,10 @@ const RepositoryItem = ({ repository }) => (
       </View>
     </View>
     <View style={styles.statsContainer}>
-      <View style={styles.statContainer}>
-        <Text fontWeight={'bold'}>{millify(repository.stargazersCount, millifyConfig)}</Text>
-        <Text fontSize={'subheading'}>Stars</Text>
-      </View>
-
-      <View style={styles.statContainer}>
-        <Text fontWeight={'bold'}>{millify(repository.forksCount, millifyConfig)}</Text>
-        <Text fontSize={'subheading'}>Forks</Text>
-      </View>
-
-      <View style={styles.statContainer}>
-        <Text fontWeight={'bold'}>{millify(repository.reviewCount, millifyConfig)}</Text>
-        <Text fontSize={'subheading'}>Reviews</Text>
-      </View>
-
-      <View style={styles.statContainer}>
-        <Text fontWeight={'bold'}>{millify(repository.ratingAverage, millifyConfig)}</Text>
-        <Text fontSize={'subheading'}>Rating</Text>
-      </View>
+      <Stat label={'Stars'} value={repository.stargazersCount}/>
+      <Stat label={'Forks'} value={repository.forksCount}/>
+      <Stat label={'Reviews'} value={repository.reviewCount}/>
+      <Stat label={'Rating'} value={repository.ratingAverage}/>
     </View>
   </View>
 );
