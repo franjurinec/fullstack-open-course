@@ -9,13 +9,13 @@ const styles = StyleSheet.create({
   signInForm: {
     padding: 16,
     backgroundColor: "white",
-    display: 'flex',
-    gap: 16
+    display: 'flex'
   },
-  signInInput: {
-    margin: 8,
+  signInSpaced: {
+    marginTop: 16,
   },
   signInButton: {
+    marginTop: 16,
     padding: 16,
     backgroundColor: theme.colors.primary,
     borderRadius: 4,
@@ -47,7 +47,7 @@ const SignInForm = ({ onSubmit }) => {
   return (
     <View style={styles.signInForm}>
       <FormikTextInput name="username" placeholder="Username" />
-      <FormikTextInput name="password" placeholder="Password" secureTextEntry />
+      <FormikTextInput style={styles.signInSpaced} name="password" placeholder="Password" secureTextEntry />
       <Pressable style={styles.signInButton} onPress={onSubmit}>
         <Text style={styles.signInButtonText} fontWeight="bold" >Sign In</Text>
       </Pressable>
