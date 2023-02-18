@@ -2,10 +2,10 @@ const theme = {
     colors: {
       textPrimary: '#24292e',
       textSecondary: '#586069',
+      textFaded: "grey",
       primary: '#0366d6',
       appBarBackground: '#24292e',
-      bg: '#e1e4e8',
-      accent: '#0366d6'
+      bg: '#e1e4e8'
     },
     fontSizes: {
       body: 14,

@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     gap: 4
   },
   label: {
-    backgroundColor: theme.colors.accent,
+    backgroundColor: theme.colors.primary,
     borderRadius: 4,
     padding: 6,
     color: 'white',
@@ -53,10 +53,12 @@ const millifyConfig = {
   lowercase: true
 }
 
-const Stat = ({ label, value }) => <View style={styles.statContainer}>
-  <Text fontWeight={'bold'}>{millify(value, millifyConfig)}</Text>
-  <Text fontSize={'subheading'}>{label}</Text>
-</View>
+const Stat = ({ label, value }) => (
+  <View style={styles.statContainer}>
+    <Text fontWeight={'bold'}>{millify(value, millifyConfig)}</Text>
+    <Text fontSize={'subheading'}>{label}</Text>
+  </View>
+)
 
 const RepositoryItem = ({ repository }) => (
   <View style={styles.repositoryItem}>
@@ -72,10 +74,10 @@ const RepositoryItem = ({ repository }) => (
       </View>
     </View>
     <View style={styles.statsContainer}>
-      <Stat label={'Stars'} value={repository.stargazersCount}/>
-      <Stat label={'Forks'} value={repository.forksCount}/>
-      <Stat label={'Reviews'} value={repository.reviewCount}/>
-      <Stat label={'Rating'} value={repository.ratingAverage}/>
+      <Stat label={'Stars'} value={repository.stargazersCount} />
+      <Stat label={'Forks'} value={repository.forksCount} />
+      <Stat label={'Reviews'} value={repository.reviewCount} />
+      <Stat label={'Rating'} value={repository.ratingAverage} />
     </View>
   </View>
 );
