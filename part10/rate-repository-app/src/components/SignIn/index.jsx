@@ -1,9 +1,9 @@
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { Pressable, StyleSheet, View } from 'react-native';
-import theme from '../theme';
-import FormikTextInput from './FormikTextInput';
-import Text from './Text';
+import theme from '../../theme';
+import FormikTextInput from '../Common/FormikTextInput';
+import Text from '../Common/Text';
 
 const styles = StyleSheet.create({
   signInForm: {

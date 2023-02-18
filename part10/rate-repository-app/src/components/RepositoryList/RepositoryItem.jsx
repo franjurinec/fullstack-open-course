@@ -1,7 +1,7 @@
 import { Image, StyleSheet, View } from "react-native";
 import millify from "millify";
-import theme from "../theme";
-import Text from "./Text"
+import theme from "../../theme";
+import Text from "../Common/Text"
 
 const styles = StyleSheet.create({
   repositoryItem: {
