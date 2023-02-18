@@ -5,7 +5,8 @@ const theme = {
       textFaded: "grey",
       primary: '#0366d6',
       appBarBackground: '#24292e',
-      bg: '#e1e4e8'
+      bg: '#e1e4e8',
+      error: '#d73a4a'
     },
     fontSizes: {
       body: 14,
