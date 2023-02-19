@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import theme from '../../theme';
 import FormikTextInput from '../Common/FormikTextInput';
 import Text from '../Common/Text';
+import useSignIn from '../../hooks/useSignIn';
 
 const styles = StyleSheet.create({
   signInForm: {
@@ -26,12 +27,12 @@ const styles = StyleSheet.create({
   signInButtonText: {
     color: 'white'
   }
-});
+})
 
 const initialValues = {
   username: '',
   password: '',
-};
+}
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -40,7 +41,7 @@ const validationSchema = yup.object().shape({
   password: yup
     .string()
     .required('Password is required'),
-});
+})
 
 
 const SignInForm = ({ onSubmit }) => {
@@ -52,12 +53,21 @@ const SignInForm = ({ onSubmit }) => {
         <Text style={styles.signInButtonText} fontWeight="bold" >Sign In</Text>
       </Pressable>
     </View>
-  );
-};
+  )
+}
 
 const SignIn = () => {
-  const onSubmit = (values) => {
-    console.log(values);
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password })
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
@@ -65,6 +75,6 @@ const SignIn = () => {
       {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
     </Formik>
   )
-};
+}
 
 export default SignIn;
