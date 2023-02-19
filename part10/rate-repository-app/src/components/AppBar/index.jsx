@@ -1,6 +1,8 @@
 import { View, StyleSheet, ScrollView } from 'react-native';
 import AppBarTab from './AppBarTab';
 import theme from '../../theme';
+import { useQuery } from '@apollo/client';
+import { ME } from '../../graphql/queries';
 
 const styles = StyleSheet.create({
   container: {
@@ -10,14 +12,20 @@ const styles = StyleSheet.create({
   }
 });
 
-const AppBar = () => (
-  <View style={styles.container}>
-    <ScrollView horizontal>
-      <AppBarTab title="Repositories" routeTo="/" />
-      <AppBarTab title="Sign in" routeTo="/signIn" />
-    </ScrollView>
-  </View>
-)
+const AppBar = () => {
+  const { data } = useQuery(ME, {
+    fetchPolicy: 'cache-and-network',
+  })
+
+  return (
+    <View style={styles.container}>
+      <ScrollView horizontal>
+        <AppBarTab title="Repositories" routeTo="/" />
+        {data?.me?.id ? <AppBarTab title="Sign out" routeTo="/signOut" /> : <AppBarTab title="Sign in" routeTo="/signIn" />}
+      </ScrollView>
+    </View>
+  )
+}
 
 
 export default AppBar;
