@@ -69,7 +69,7 @@ const millifyConfig = {
 
 const Stat = ({ label, value }) => (
   <View style={styles.statContainer}>
-    <Text fontWeight={'bold'}>{millify(value, millifyConfig)}</Text>
+    <Text fontSize={'subheading'} fontWeight={'bold'}>{millify(value, millifyConfig)}</Text>
     <Text fontSize={'subheading'}>{label}</Text>
   </View>
 )
