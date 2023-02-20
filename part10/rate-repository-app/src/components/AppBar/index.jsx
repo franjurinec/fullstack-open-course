@@ -24,6 +24,7 @@ const AppBar = () => {
         {data?.me?.id ? (
           <>
             <AppBarTab title="Create a review" routeTo="/createReview" />
+            <AppBarTab title="My reviews" routeTo="/myReviews" />
             <AppBarTab title="Sign out" routeTo="/signOut" />
           </>
         ) : (
