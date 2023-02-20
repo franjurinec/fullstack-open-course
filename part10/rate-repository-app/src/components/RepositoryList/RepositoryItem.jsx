@@ -62,7 +62,7 @@ const Stat = ({ label, value }) => (
 )
 
 const RepositoryItem = ({ repository }) => (
-  <View style={styles.repositoryItem}>
+  <View testID="repositoryItem" style={styles.repositoryItem}>
     <View style={styles.horizontalFlexbox}>
       <Image
         style={styles.tinyLogo}
