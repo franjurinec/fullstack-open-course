@@ -67,7 +67,7 @@ const RepositoryDetailed = () => {
       keyExtractor={({ id }) => id}
       ListHeaderComponent={() => <RepositoryItem repository={repository} detailed />}
     />
-  );
-};
+  )
+}
 
 export default RepositoryDetailed;
