@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { CORE_REPOSITORY_FIELDS } from './fragments';
+import { CORE_REPOSITORY_FIELDS, DETAILED_REPOSITORY_FIELDS } from './fragments';
 
 export const GET_REPOSITORIES = gql`
   ${CORE_REPOSITORY_FIELDS}
@@ -10,6 +10,15 @@ export const GET_REPOSITORIES = gql`
             ...CoreRepositoryFields
         }
       }
+    }
+  }
+`;
+
+export const GET_REPOSITORY = gql`
+  ${DETAILED_REPOSITORY_FIELDS}
+  query Repository($id: ID!) {
+    repository(id: $id) {
+      ...DetailedRepositoryFields
     }
   }
 `;
