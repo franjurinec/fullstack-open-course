@@ -4,7 +4,7 @@ import Text from '../Common/Text';
 
 const styles = StyleSheet.create({
   tab: {
-    padding: 24
+    padding: 16
   },
   tabText: {
     color: 'white'
