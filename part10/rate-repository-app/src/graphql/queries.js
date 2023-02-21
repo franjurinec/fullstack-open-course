@@ -5,6 +5,7 @@ export const GET_REPOSITORIES = gql`
   ${CORE_REPOSITORY_FIELDS}
   query Repositories($first: Int, $after: String, $searchKeyword: String, $orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection){
     repositories(first: $first, after: $after, searchKeyword: $searchKeyword, orderBy: $orderBy, orderDirection: $orderDirection) {
+      totalCount
       pageInfo {
         endCursor
         startCursor
@@ -22,7 +23,7 @@ export const GET_REPOSITORIES = gql`
 
 export const GET_REPOSITORY = gql`
   ${DETAILED_REPOSITORY_FIELDS}
-  query Repository($id: ID!) {
+  query Repository($id: ID!, $first: Int, $after: String) {
     repository(id: $id) {
       ...DetailedRepositoryFields
     }

@@ -37,8 +37,15 @@ export const DETAILED_REPOSITORY_FIELDS = gql`
   fragment DetailedRepositoryFields on Repository {
     ...CoreRepositoryFields
     url
-    reviews {
+    reviews(first: $first, after: $after) {
+      totalCount
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
+      }
       edges {
+        cursor
         node {
           ...CoreReviewFields
         }

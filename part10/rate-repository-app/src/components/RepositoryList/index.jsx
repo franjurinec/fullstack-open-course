@@ -133,15 +133,12 @@ const RepositoryList = () => {
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500)
   const [selectedOrder, setSelectedOrder] = useState(Object.keys(orderOptions)[0]);
   const { repositories, loading, fetchMore } = useRepositories({
-    first: 5,
+    first: 10,
     searchKeyword: debouncedSearchQuery,
     ...orderOptions[selectedOrder].value
   });
 
-  const onEndReach = () => {
-    console.log('End reached!')
-    fetchMore()
-  }
+  const onEndReach = () => fetchMore()
 
   if (!loading) return (
     <RepositoryListContainer

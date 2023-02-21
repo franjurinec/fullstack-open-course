@@ -12,9 +12,6 @@ const useRepositories = (variables) => {
   const handleFetchMore = () => {
     const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
 
-    console.log('Fetching more!', canFetchMore)
-    console.log(data, loading)
-
     if (!canFetchMore) {
       return;
     }
