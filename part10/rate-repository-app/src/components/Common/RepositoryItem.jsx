@@ -25,9 +25,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'baseline',
     marginStart: 18,
-    flexGrow: 1,
-    flex: 1,
-    flexWrap: 'wrap'
+    flexGrow: 1
   },
   statsContainer: {
     display: 'flex',
@@ -38,9 +36,6 @@ const styles = StyleSheet.create({
     marginTop: 18,
     display: 'flex',
     alignItems: 'center'
-  },
-  description: {
-    marginTop: 4
   },
   label: {
     backgroundColor: theme.colors.primary,
@@ -60,7 +55,15 @@ const styles = StyleSheet.create({
   },
   gitHubButtonText: {
     color: 'white'
-  }
+  },
+  wrappedTextContainer: {
+    marginTop: 4,
+    flexDirection: 'row',
+  },
+  description: {
+    flex: 1, 
+    flexWrap: 'wrap'
+  },
 })
 
 const millifyConfig = {
@@ -87,7 +90,9 @@ const RepositoryItem = ({ repository, detailed }) => {
         />
         <View style={styles.titleContainer}>
           <Text fontWeight={'bold'} >{repository.fullName}</Text>
-          <Text style={styles.description} fontSize={'subheading'} >{repository.description}</Text>
+          <View style={styles.wrappedTextContainer}>
+            <Text style={styles.description} fontSize={'subheading'} >{repository.description}</Text>
+          </View>
           <Text style={styles.label}>{repository.language}</Text>
         </View>
       </View>

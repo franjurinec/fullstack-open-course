@@ -30,12 +30,18 @@ const styles = StyleSheet.create({
   },
   reviewContentContainer: {
     display: 'flex',
-    paddingStart: 16,
-    flex: 1,
-    flexWrap: 'wrap'
+    paddingHorizontal: 16,
+    flexGrow: 1,
+    alignItems: 'flex-start',
+  },
+  wrappedTextContainer: {
+    flexDirection: 'row',
+    paddingTop: 6,
+    paddingEnd: 10
   },
   reviewDescription: {
-    paddingTop: 6
+    flex: 1, 
+    flexWrap: 'wrap'
   }
 })
 
@@ -45,9 +51,15 @@ const ReviewItem = ({ review }) => (
       <Text style={styles.reviewRatingText} fontWeight="bold">{review.rating}</Text>
     </View>
     <View style={styles.reviewContentContainer}>
-      <Text fontSize="subheading" fontWeight="bold">{review.user.username}</Text>
-      <Text fontSize="subheading">{format(Date.parse(review.createdAt), 'dd.MM.yyyy')}</Text>
-      <Text style={styles.reviewDescription} >{review.text}</Text>
+      <View style={styles.wrappedTextContainer}>
+        <Text fontSize="subheading" fontWeight="bold">{review.user.username}</Text>
+      </View>
+      <View style={styles.wrappedTextContainer}>
+        <Text fontSize="subheading">{format(Date.parse(review.createdAt), 'dd.MM.yyyy')}</Text>
+      </View>
+      <View style={styles.wrappedTextContainer}>
+        <Text style={styles.reviewDescription} >{review.text}</Text>
+      </View>
     </View>
   </View>
 );
