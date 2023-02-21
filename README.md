@@ -11,5 +11,6 @@
 | __Part 7__ | Miscellaneous - React Router, Custom Hooks, Styling, Webpack |
 | __Part 8__ | GraphQL |
 | __Part 9__ | TypeScript |
+| __Part 10__ | React Native |
 | __Part 11__ | CI/CD |
 | __Part 12__ | Containers - Docker, Docker Compose |
