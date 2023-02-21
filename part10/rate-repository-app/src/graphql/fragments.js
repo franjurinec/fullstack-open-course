@@ -25,6 +25,7 @@ export const CORE_REVIEW_FIELDS = gql`
       username
     }
     repository {
+      id
       fullName
     }
   }
