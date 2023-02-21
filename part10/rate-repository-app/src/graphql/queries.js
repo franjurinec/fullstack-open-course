@@ -3,9 +3,15 @@ import { CORE_REPOSITORY_FIELDS, CORE_REVIEW_FIELDS, DETAILED_REPOSITORY_FIELDS 
 
 export const GET_REPOSITORIES = gql`
   ${CORE_REPOSITORY_FIELDS}
-  query Repositories($searchKeyword: String, $orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection){
-    repositories(searchKeyword: $searchKeyword, orderBy: $orderBy, orderDirection: $orderDirection) {
+  query Repositories($first: Int, $after: String, $searchKeyword: String, $orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection){
+    repositories(first: $first, after: $after, searchKeyword: $searchKeyword, orderBy: $orderBy, orderDirection: $orderDirection) {
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
+      }
       edges {
+        cursor
         node {
             ...CoreRepositoryFields
         }

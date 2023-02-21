@@ -3,7 +3,7 @@ import { Picker } from '@react-native-picker/picker';
 import { Searchbar } from 'react-native-paper';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-native';
-import { useDebounce} from 'use-debounce';
+import { useDebounce } from 'use-debounce';
 import useRepositories from '../../hooks/useRepositories';
 import RepositoryItem from '../Common/RepositoryItem';
 
@@ -50,11 +50,11 @@ const orderOptions = {
 
 const ItemSeparator = () => <View style={styles.separator} />
 
-const RepoisoryListHeader = ({ 
+const RepoisoryListHeader = ({
   searchQuery,
   setSearchQuery,
-  selectedOrder, 
-  setSelectedOrder 
+  selectedOrder,
+  setSelectedOrder
 }) => {
 
   const onChangeSearch = query => setSearchQuery(query);
@@ -93,13 +93,16 @@ const PressableRepositoryItem = ({ repository, navigate }) => {
   )
 }
 
-export const RepositoryListContainer = ({ 
+
+
+export const RepositoryListContainer = ({
   navigate,
   repositories,
   selectedOrder,
   setSelectedOrder,
   searchQuery,
-  setSearchQuery
+  setSearchQuery,
+  onEndReach
 }) => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
@@ -109,8 +112,10 @@ export const RepositoryListContainer = ({
     <FlatList
       data={repositoryNodes}
       keyExtractor={item => item.id}
-      renderItem={({ item }) => <PressableRepositoryItem 
-        navigate={navigate} 
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
+      renderItem={({ item }) => <PressableRepositoryItem
+        navigate={navigate}
         repository={item} />}
       ListHeaderComponent={<RepoisoryListHeader
         searchQuery={searchQuery}
@@ -127,14 +132,27 @@ const RepositoryList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500)
   const [selectedOrder, setSelectedOrder] = useState(Object.keys(orderOptions)[0]);
-  const { repositories } = useRepositories(debouncedSearchQuery, orderOptions[selectedOrder].value);
-  return <RepositoryListContainer
-    navigate={navigate}
-    searchQuery={searchQuery}
-    setSearchQuery={setSearchQuery}
-    selectedOrder={selectedOrder} 
-    setSelectedOrder={setSelectedOrder} 
-    repositories={repositories} />;
+  const { repositories, loading, fetchMore } = useRepositories({
+    first: 5,
+    searchKeyword: debouncedSearchQuery,
+    ...orderOptions[selectedOrder].value
+  });
+
+  const onEndReach = () => {
+    console.log('End reached!')
+    fetchMore()
+  }
+
+  if (!loading) return (
+    <RepositoryListContainer
+      onEndReach={onEndReach}
+      navigate={navigate}
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
+      selectedOrder={selectedOrder}
+      setSelectedOrder={setSelectedOrder}
+      repositories={repositories} />
+  )
 };
 
 export default RepositoryList;
