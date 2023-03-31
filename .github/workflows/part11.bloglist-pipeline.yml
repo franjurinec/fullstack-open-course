@@ -5,9 +5,9 @@ on:
     branches:
       - master
     paths:
-      - part7/bloglist/**
-      - part7/bloglist-frontend/**
-      - part7/bloglist-docker-image/**
+      - part07/bloglist/**
+      - part07/bloglist-frontend/**
+      - part07/bloglist-docker-image/**
 
   pull_request:
     types: [opened, synchronize]
@@ -27,23 +27,23 @@ jobs:
           node-version: 18
           
       - name: npm install backend
-        working-directory: part7/bloglist
+        working-directory: part07/bloglist
         run: npm install
 
       - name: test backend
-        working-directory: part7/bloglist
+        working-directory: part07/bloglist
         run: npm run test
 
       - name: npm install frontend
-        working-directory: part7/bloglist-frontend
+        working-directory: part07/bloglist-frontend
         run: npm install
 
       - name: lint frontend
-        working-directory: part7/bloglist-frontend
+        working-directory: part07/bloglist-frontend
         run: npm run eslint
 
       - name: build frontend
-        working-directory: part7/bloglist-frontend
+        working-directory: part07/bloglist-frontend
         run: npm run build
 
       - name: e2e test
@@ -51,7 +51,7 @@ jobs:
         with:
           start: npm run --prefix ../bloglist start:test
           wait-on: http://localhost:3003
-          working-directory: part7/bloglist-frontend
+          working-directory: part07/bloglist-frontend
 
       - name: Log in to Docker Hub
         if: ${{ github.event_name == 'push' }}
@@ -64,8 +64,8 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         uses: docker/build-push-action@v4.0.0
         with:
-          context: part7
-          file: part7/bloglist-docker-image/Dockerfile
+          context: part07
+          file: part07/bloglist-docker-image/Dockerfile
           push: true
           tags: |
             thefenix/bloglist:latest
